@@ -1,7 +1,12 @@
-#define TAB_WIDTH 11
+#define TAB_WIDTH 21
 #define TAB_HEIGHT 11
 
 #include "consoleUtils.hpp"
+#include <random>
+
+using std::cout;
+using std::endl;
+
 
 struct Position {
 	unsigned int x;
@@ -14,19 +19,30 @@ class Player {
         char skin = '@';
 };
 
-void pop_pokemon(char **tab, class Player)
-{
+class Pokemon {
+	public:
+		struct Position cur_pos;
+		char skin ='$';
+}
+
+void pop_pokemon(char **tab, class Player){ 
+	std::srand(std::time(nullptr));
     for (unsigned int j=1; j<TAB_HEIGHT - 1; j++) {
 		for (unsigned int i=1; i<TAB_WIDTH - 1; i++) {
-            if (rand() % 8 == 2)
-			    tab[j][i] = '$';
+            if (rand() % 10 == 2)
+			    tab[j][i] = Pokemon.skin ;
 		}
 	} 
 }
 
+/***void move_pokemon(char **tab){
+On recréer un tableau et on move les pokemon un par un ? (le premier ne prenant aucune position en compte, le deuxième uniquement celui de la un etc. )
+}***/
+
 int main(void){
     ConsoleUtils::clear();
-	std::cout << "Test 9: keyboard input using arrows keys and display allocated tab of char" << std::endl;
+
+	std::cout << "GOTTA CATCH THEM ALL!!" << std::endl;
 	std::cout << "Hit Space to continue to the next test." << std::endl;
 	{
 		unsigned int textOffset = 2; // my call to setCursorPos must be shifted by 2 because I display 3 sentences above before.
