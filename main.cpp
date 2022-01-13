@@ -23,21 +23,55 @@ class Pokemon {
 	public:
 		struct Position cur_pos;
 		char skin ='$';
-}
+		 /*** savoir si le pokemon est bougé ou non***/
+};
 
 void pop_pokemon(char **tab, class Player){ 
 	std::srand(std::time(nullptr));
     for (unsigned int j=1; j<TAB_HEIGHT - 1; j++) {
 		for (unsigned int i=1; i<TAB_WIDTH - 1; i++) {
-            if (rand() % 10 == 2)
-			    tab[j][i] = Pokemon.skin ;
+            if (rand() % 20 == 2)
+			    tab[j][i] = '$' ;
 		}
 	} 
 }
 
-/***void move_pokemon(char **tab){
-On recréer un tableau et on move les pokemon un par un ? (le premier ne prenant aucune position en compte, le deuxième uniquement celui de la un etc. )
-}***/
+void move_pokemon(char **tab){
+	for (unsigned int j=1; j<TAB_HEIGHT - 1; j++) {
+		for (unsigned int i=1; i<TAB_WIDTH - 1; i++) {
+            if (tab[j][i] == '$'){
+				tab[j][i]='.';
+				tab[j+1][i]='&';
+				/*** int u=1;
+				while (u==1) {
+					int movement=rand() % 4 ;
+				if (movement == 0){
+					tab[j-1][i]='$';
+					std::cout << tab[j-1][i];
+					u=0;
+					}
+				if (movement == 1){
+					tab[j+1][i]='$';
+					std::cout << tab[j+1][i];
+					u=0;
+					}
+				if (movement == 2){
+					tab[j][i-1]='$';
+					std::cout << tab[j][i-1];
+					u=0;
+					}
+				
+				if (movement == 3){
+					tab[j][i+1]='$';
+					std::cout << tab[j][i+1];
+					u=0;
+					}
+				} ***/
+			}
+		}
+	} 
+/*** On recréer un tableau et on move les pokemon un par un ? (le premier ne prenant aucune position en compte, le deuxième uniquement celui de la un etc. )***/
+}
 
 int main(void){
     ConsoleUtils::clear();
@@ -78,6 +112,7 @@ int main(void){
 
 		bool exitLoop = false;
 		while (!exitLoop) {
+			move_pokemon(tab); 
 			bool special = false;
 			int c = ConsoleUtils::getChar(&special);
 
@@ -85,10 +120,10 @@ int main(void){
 
 			if(special) {
 				switch (c) {
-					case ConsoleUtils::KEY_UP: if(p.cur_pos.y>0) --p.cur_pos.y; break;
+					case ConsoleUtils::KEY_UP: if(p.cur_pos.y>0) --p.cur_pos.y;  break;
 					case ConsoleUtils::KEY_DOWN: if(p.cur_pos.y<TAB_HEIGHT-1) ++p.cur_pos.y; break;
-					case ConsoleUtils::KEY_LEFT: if(p.cur_pos.x>0) --p.cur_pos.x; break;
-					case ConsoleUtils::KEY_RIGHT: if(p.cur_pos.x<TAB_WIDTH-1) ++p.cur_pos.x; break;
+					case ConsoleUtils::KEY_LEFT: if(p.cur_pos.x>0) --p.cur_pos.x;  break;
+					case ConsoleUtils::KEY_RIGHT: if(p.cur_pos.x<TAB_WIDTH-1) ++p.cur_pos.x;  break;
 					default: break;
 				}
 			}else if (c == ' ') {
@@ -101,7 +136,10 @@ int main(void){
 				std::cout << tab[oldPos.y][oldPos.x]; // Clean up my current location by showing what is in my tab
 				ConsoleUtils::setCursorPos(p.cur_pos.x, p.cur_pos.y + textOffset);
 				std::cout << p.skin; // Output '@' at my position
+			
 			}
+		}
+
 		}
 		// important free my allocated memory
 		free(tab);
