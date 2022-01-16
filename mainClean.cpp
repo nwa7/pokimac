@@ -51,6 +51,7 @@ int main()
 		//génération nombre random pour déplacement pokemon
 		std::srand(std::time(nullptr));
 		int textOffset = 2; //décaler car on a 2 phrasesau début
+		int numberPokemon = rand() % 25 + 8;
 		
 		//init map principale 
 		char *map = (char *)malloc(sizeof(char) * MAP_WIDTH * MAP_HEIGHT);
@@ -67,9 +68,13 @@ int main()
 		displayCharacter(player.curPos.x, player.curPos.y + textOffset, player.skin);
 
 		//pokemon
-		Pokemon pok1;
-		pok1 = initPokemon(MAP_WIDTH - 20, MAP_HEIGHT - 5, '&', 100);
-		displayCharacter(pok1.curPos.x, pok1.curPos.y + textOffset, pok1.skin);
+		Pokemon *pokemonTab = (Pokemon *)malloc(sizeof(Pokemon) * numberPokemon);
+		for(int i=0; i<numberPokemon; i++){
+		int pokemonX = rand() % 75;
+		int pokemonY = rand() % 15;
+  		pokemonTab[i] = initPokemon((MAP_WIDTH -2) - pokemonX, (MAP_HEIGHT -2) - pokemonY, '&', 100);
+		displayCharacter(pokemonTab[i].curPos.x, pokemonTab[i].curPos.y + textOffset, pokemonTab[i].skin);
+		}
 	   
 		bool gameNotOver = false;
 		while (!gameNotOver){
@@ -78,33 +83,32 @@ int main()
 			if (special)
 			{
 				playerMove(&player, c, MAP_HEIGHT, MAP_WIDTH, textOffset); 
-				if (player.curPos.x == pok1.curPos.x && player.curPos.y == pok1.curPos.y)
+				for(int i=0; i<numberPokemon; i++){
+				if (player.curPos.x == pokemonTab[i].curPos.x && player.curPos.y == pokemonTab[i].curPos.y)
 				{
 					//passage nouvel écran
 					ConsoleUtils::clear();
 					displayScreen(interactionScreen, MAP_WIDTH, INTERACTION_HEIGHT, 0, 0);	
 					
 					//fuite 
-					if(meetPokemon(map, MAP_WIDTH, MAP_HEIGHT, textOffset, player, pok1)==3){
-						pokemonMove(&pok1, MAP_WIDTH, MAP_HEIGHT, textOffset);
-						displayMap(map, MAP_WIDTH, MAP_HEIGHT, textOffset, player, pok1);
+					if(meetPokemon(map, MAP_WIDTH, MAP_HEIGHT, textOffset, player, pokemonTab[i])==3){
+						pokemonMove(&pokemonTab[i], MAP_WIDTH, MAP_HEIGHT, textOffset);
+						displayMap(map, MAP_WIDTH, MAP_HEIGHT, textOffset, player, pokemonTab[i]);
+						for(int i=0; i<numberPokemon; i++){
+						displayCharacter(pokemonTab[i].curPos.x, pokemonTab[i].curPos.y + textOffset, '&');
+						}
 					};	
 					
 				}
 				else
 				{
-					displayCharacter(pok1.curPos.x, pok1.curPos.y + textOffset, ' ');
-					pokemonMove(&pok1, MAP_WIDTH, MAP_HEIGHT, textOffset);
-					pok1.skin = '&';
-					displayCharacter(pok1.curPos.x, pok1.curPos.y + textOffset, pok1.skin);
+					
+					displayCharacter(pokemonTab[i].curPos.x, pokemonTab[i].curPos.y + textOffset, ' ');
+					pokemonMove(&pokemonTab[i], MAP_WIDTH, MAP_HEIGHT, textOffset);
+					displayCharacter(pokemonTab[i].curPos.x, pokemonTab[i].curPos.y + textOffset, '&');
+		
 				}
-
-				//DEBUG
-				ConsoleUtils::setCursorPos(120, 0);
-				std::cout << player.curPos.x << "  " << player.curPos.y; 
-				ConsoleUtils::setCursorPos(120, 1); 
-				std::cout << pok1.curPos.x << "  "  << pok1.curPos.y; 
-				//FIN DEBUG
+				}
 			}
 			else if (c == ' ')
 			{
@@ -166,14 +170,14 @@ void pokemonMove(Pokemon *pokemon, int MAP_WIDTH, int MAP_HEIGHT, int textOffset
 	if (randomMove % 4 == 0 && pokemon->curPos.x != MAP_WIDTH - 2){
 		pokemon->curPos.x += 1;
 	}
-	else if (randomMove % 4 == 1 && pokemon->curPos.x != 0){
+	else if (randomMove % 4 == 1 && pokemon->curPos.x != 2){
 		pokemon->curPos.x -= 1;
 	}
 	else if (randomMove % 4 == 2 && pokemon->curPos.y != MAP_HEIGHT - 2)
 	{
 		pokemon->curPos.y += 1;
 	}
-	else if (randomMove % 4 == 3 && pokemon->curPos.y != textOffset + 1)
+	else if (randomMove % 4 == 3 && pokemon->curPos.y != textOffset + 2)
 	{
 		pokemon->curPos.y -= 1;
 	}
