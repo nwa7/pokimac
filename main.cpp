@@ -1,148 +1,123 @@
-#define TAB_WIDTH 21
-#define TAB_HEIGHT 11
-
-#include "consoleUtils.hpp"
+#include <iostream>
 #include <random>
+#include "consoleUtils.hpp"
+#include "interface.h"
+#include "player.h"
+#include "pokemon.h"
 
+using std::cin;
 using std::cout;
 using std::endl;
 
+const int MAP_WIDTH = 80;
+const int MAP_HEIGHT = 20;
+const int INTERACTION_HEIGHT = 10;
 
-struct Position {
-	unsigned int x;
-	unsigned int y;
-};
 
-class Player {
-    public:
-        struct Position cur_pos = {TAB_WIDTH / 2, TAB_HEIGHT / 2};
-        char skin = '@';
-};
-
-class Pokemon {
-	public:
-		struct Position cur_pos;
-		char skin ='$';
-		 /*** savoir si le pokemon est bougé ou non***/
-};
-
-void pop_pokemon(char **tab, class Player){ 
-	std::srand(std::time(nullptr));
-    for (unsigned int j=1; j<TAB_HEIGHT - 1; j++) {
-		for (unsigned int i=1; i<TAB_WIDTH - 1; i++) {
-            if (rand() % 20 == 2)
-			    tab[j][i] = '$' ;
-		}
-	} 
-}
-
-void move_pokemon(char **tab){
-	for (unsigned int j=1; j<TAB_HEIGHT - 1; j++) {
-		for (unsigned int i=1; i<TAB_WIDTH - 1; i++) {
-            if (tab[j][i] == '$'){
-				tab[j][i]='.';
-				tab[j+1][i]='&';
-				/*** int u=1;
-				while (u==1) {
-					int movement=rand() % 4 ;
-				if (movement == 0){
-					tab[j-1][i]='$';
-					std::cout << tab[j-1][i];
-					u=0;
-					}
-				if (movement == 1){
-					tab[j+1][i]='$';
-					std::cout << tab[j+1][i];
-					u=0;
-					}
-				if (movement == 2){
-					tab[j][i-1]='$';
-					std::cout << tab[j][i-1];
-					u=0;
-					}
-				
-				if (movement == 3){
-					tab[j][i+1]='$';
-					std::cout << tab[j][i+1];
-					u=0;
-					}
-				} ***/
-			}
-		}
-	} 
-/*** On recréer un tableau et on move les pokemon un par un ? (le premier ne prenant aucune position en compte, le deuxième uniquement celui de la un etc. )***/
-}
-
-int main(void){
-    ConsoleUtils::clear();
-
+int meetPokemon(char *screen, int MAP_WIDTH, int MAP_HEIGHT, int textOffset, Player player, Pokemon pokemon);
+int main()
+{
+	ConsoleUtils::clear();
 	std::cout << "GOTTA CATCH THEM ALL!!" << std::endl;
-	std::cout << "Hit Space to continue to the next test." << std::endl;
+	std::cout << "Hit space to quit" << std::endl;
 	{
-		unsigned int textOffset = 2; // my call to setCursorPos must be shifted by 2 because I display 3 sentences above before.
 
-		// init my char tab
-        Player p;
-		char **tab = (char **)malloc(sizeof(char *) * TAB_HEIGHT);
-        for (size_t i = 0; i < TAB_HEIGHT; ++i)
-        {
-            tab[i] = (char *)malloc(sizeof(char) * TAB_WIDTH);
-        }
+		//génération nombre random pour déplacement pokemon
+		std::srand(std::time(nullptr));
+		int textOffset = 2; //décaler car on a 2 phrasesau début
+		int numberPokemon = rand() % 25 + 8;
+		
+		//init map principale 
+		char *map = (char *)malloc(sizeof(char) * MAP_WIDTH * MAP_HEIGHT);
+		initScreen(map, MAP_WIDTH, MAP_HEIGHT);
+		displayScreen(map, MAP_WIDTH, MAP_HEIGHT, 0, 0+textOffset);
 
-		// fill my char tab with specific pattern 
-		for (unsigned int j=0; j<TAB_HEIGHT; j++) {
-			for (unsigned int i=0; i<TAB_WIDTH; i++) {
-				tab[j][i] = (i%(TAB_WIDTH-1) == 0 || j%(TAB_HEIGHT-1) == 0) ?  '#' : '.';
-			}
+		//init screen interaction recontre pokemon
+		char interactionScreen[MAP_WIDTH * INTERACTION_HEIGHT];
+		initScreen(interactionScreen, MAP_WIDTH, INTERACTION_HEIGHT);
+
+		//player
+		Player player;
+		player = initPlayer(MAP_WIDTH / 2, MAP_HEIGHT /2 , '@', 100);
+		displayCharacter(player.curPos.x, player.curPos.y + textOffset, player.skin);
+
+		//pokemon
+		Pokemon *pokemonTab = (Pokemon *)malloc(sizeof(Pokemon) * numberPokemon);
+		for(int i=0; i<numberPokemon; i++){
+		int pokemonX = rand() % 75;
+		int pokemonY = rand() % 15;
+  		pokemonTab[i] = initPokemon((MAP_WIDTH -2) - pokemonX, (MAP_HEIGHT -2) - pokemonY, '&', 100);
+		displayCharacter(pokemonTab[i].curPos.x, pokemonTab[i].curPos.y + textOffset, pokemonTab[i].skin);
 		}
-
-        pop_pokemon(tab, p);
-
-		// Display my tab at origin (0,0)
-		ConsoleUtils::setCursorPos(0, 0 + textOffset);
-		for (unsigned int j=0; j<TAB_HEIGHT; j++) {
-			for (unsigned int i=0; i<TAB_WIDTH; i++) {
-				std::cout << tab[j][i];
-			}
-			std::cout << std::endl;
-		}
-
-		ConsoleUtils::setCursorPos(p.cur_pos.x, p.cur_pos.y + textOffset);
-		std::cout << p.skin; // Output '@' at my position
-
-		bool exitLoop = false;
-		while (!exitLoop) {
-			move_pokemon(tab); 
+	   
+		bool gameNotOver = false;
+		while (!gameNotOver){
 			bool special = false;
 			int c = ConsoleUtils::getChar(&special);
-
-			Position oldPos = p.cur_pos;
-
-			if(special) {
-				switch (c) {
-					case ConsoleUtils::KEY_UP: if(p.cur_pos.y>0) --p.cur_pos.y;  break;
-					case ConsoleUtils::KEY_DOWN: if(p.cur_pos.y<TAB_HEIGHT-1) ++p.cur_pos.y; break;
-					case ConsoleUtils::KEY_LEFT: if(p.cur_pos.x>0) --p.cur_pos.x;  break;
-					case ConsoleUtils::KEY_RIGHT: if(p.cur_pos.x<TAB_WIDTH-1) ++p.cur_pos.x;  break;
-					default: break;
+			if (special)
+			{
+				playerMove(&player, c, MAP_HEIGHT, MAP_WIDTH, textOffset); 
+				for(int i=0; i<numberPokemon; i++){
+				if (player.curPos.x == pokemonTab[i].curPos.x && player.curPos.y == pokemonTab[i].curPos.y)
+				{
+					//passage nouvel écran
+					ConsoleUtils::clear();
+					displayScreen(interactionScreen, MAP_WIDTH, INTERACTION_HEIGHT, 0, 0);	
+					
+					//fuite 
+					if(meetPokemon(map, MAP_WIDTH, MAP_HEIGHT, textOffset, player, pokemonTab[i])==3){
+						pokemonMove(&pokemonTab[i], MAP_WIDTH, MAP_HEIGHT, textOffset);
+						displayMap(map, MAP_WIDTH, MAP_HEIGHT, textOffset);
+						displayCharacter(player.curPos.x, player.curPos.y + textOffset, player.skin);
+						for(int i=0; i<numberPokemon; i++){
+						displayCharacter(pokemonTab[i].curPos.x, pokemonTab[i].curPos.y + textOffset, '&');
+						}
+					};	
+					
 				}
-			}else if (c == ' ') {
-				 exitLoop = true;
+				else
+				{
+					
+					displayCharacter(pokemonTab[i].curPos.x, pokemonTab[i].curPos.y + textOffset, ' ');
+					pokemonMove(&pokemonTab[i], MAP_WIDTH, MAP_HEIGHT, textOffset);
+					displayCharacter(pokemonTab[i].curPos.x, pokemonTab[i].curPos.y + textOffset, '&');
+		
+				}
+				}
 			}
-
-			// if my position change
-			if(oldPos.x != p.cur_pos.x || oldPos.y != p.cur_pos.y) {
-				ConsoleUtils::setCursorPos(oldPos.x, oldPos.y + textOffset);
-				std::cout << tab[oldPos.y][oldPos.x]; // Clean up my current location by showing what is in my tab
-				ConsoleUtils::setCursorPos(p.cur_pos.x, p.cur_pos.y + textOffset);
-				std::cout << p.skin; // Output '@' at my position
-			
+			else if (c == ' ')
+			{
+				gameNotOver = true;
 			}
 		}
 
-		}
-		// important free my allocated memory
-		free(tab);
+		free(map);
+	}   
+	ConsoleUtils::clear();
+}
+
+
+int meetPokemon(char *screen, int MAP_WIDTH, int MAP_HEIGHT, int textOffset, Player player, Pokemon pokemon){
+	displayActionChoice(MAP_WIDTH);
+	int arrowChoice;
+	do{ 
+	bool special = false;
+	arrowChoice = ConsoleUtils::getChar(&special);
+	} while(arrowChoice != ConsoleUtils::KEY_UP && arrowChoice != ConsoleUtils::KEY_DOWN && arrowChoice != ConsoleUtils::KEY_LEFT && arrowChoice != ConsoleUtils::KEY_RIGHT);
+	switch (arrowChoice){
+		case ConsoleUtils::KEY_UP:
+			return 0;
+			break;
+		case ConsoleUtils::KEY_DOWN:
+			return 1;
+			break;
+		case ConsoleUtils::KEY_LEFT:
+			return 2;
+			break;
+		case ConsoleUtils::KEY_RIGHT:
+			return 3;
+		default:
+			break;
 	}
-    ConsoleUtils::clear();
+	
 }

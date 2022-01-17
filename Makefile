@@ -1,14 +1,33 @@
-CC = g++
-CFLAGS = -Wall -Wextra -Werror
 
-SRC = main.cpp
-OBJ = $(patsubst %.cpp, %.o, $(SRC))
-BIN = main
+# Dans un fichier makefile, on peut utiliser de variables.
+# monvar = valeur    pour affecter
+# $(monvar)          pour recuperer la valeur
 
-all: $(BIN)
+# De plus, il y a quelques variables internes, qu'on peut utiliser:
+# $@ pour nom de cible
+# $< pour nom de la premiere dependance
+# $^ pour toute la liste des dépendances
 
-$(BIN): $(OBJ)
-	$(CC) $(CFLAGS) $^ -o $@
+
+CC=g++
+CFLAGS=-Wall
+
+game: main.o interface.o player.o pokemon.o
+	$(CC) -o $@ $^
+	
+main.o: main.cpp player.h pokemon.h interface.h consoleUtils.hpp
+	$(CC) -o $@ -c $< $(CFLAGS)
+
+player.o: player.cpp consoleUtils.hpp player.h interface.h
+	$(CC) -o $@ -c $< $(CFLAGS)
+
+pokemon.o: pokemon.cpp pokemon.h
+	$(CC) -o $@ -c $< $(CFLAGS)	
+
+interface.o: interface.cpp consoleUtils.hpp interface.h
+	$(CC) -o $@ -c $< $(CFLAGS)	
 
 clean:
-	$(RM) $(BIN) $(OBJ)
+	rm -rf *.o
+
+
