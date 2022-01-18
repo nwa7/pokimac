@@ -37,16 +37,25 @@ int main()
 		initScreen(interactionScreen, MAP_WIDTH, INTERACTION_HEIGHT);
 
 		//player
+
+		/*Player player;
+		player = initPlayer(MAP_WIDTH / 2, MAP_HEIGHT /2 , '@', 100);*/
+		Pokemon starterPokemon = initPokemon(MAP_WIDTH / 2, MAP_HEIGHT /2, '&', 100, rand() % 6, rand() % 6, rand() % 10); 
 		Player player;
-		player = initPlayer(MAP_WIDTH / 2, MAP_HEIGHT /2 , '@', 100);
+		player = initPlayer(MAP_WIDTH / 2, MAP_HEIGHT /2 , '@', starterPokemon);
+		ConsoleUtils::setColor(ConsoleUtils::Color::CYAN); 
 		displayCharacter(player.curPos.x, player.curPos.y + textOffset, player.skin);
+		ConsoleUtils::resetColors();
 
 		//pokemon
 		Pokemon *pokemonTab = (Pokemon *)malloc(sizeof(Pokemon) * numberPokemon);
 		for(int i=0; i<numberPokemon; i++){
 		int pokemonX = rand() % 75;
 		int pokemonY = rand() % 15;
-  		pokemonTab[i] = initPokemon((MAP_WIDTH -2) - pokemonX, (MAP_HEIGHT -2) - pokemonY, '&', 100);
+  		int atkIndex = rand() % 6;
+		int defIndex = rand() % 6;
+		int nameIndex = rand() % 10;
+  		pokemonTab[i] = initPokemon((MAP_WIDTH -2) - pokemonX, (MAP_HEIGHT -2) - pokemonY, '&', 100, atkIndex, defIndex, nameIndex);
 		displayCharacter(pokemonTab[i].curPos.x, pokemonTab[i].curPos.y + textOffset, pokemonTab[i].skin);
 		}
 	   
@@ -56,34 +65,54 @@ int main()
 			int c = ConsoleUtils::getChar(&special);
 			if (special)
 			{
-				playerMove(&player, c, MAP_HEIGHT, MAP_WIDTH, textOffset); 
+				playerMove(&player, c, MAP_HEIGHT, MAP_WIDTH, textOffset);
+
+				int pokemonCollidId = -1;
+
 				for(int i=0; i<numberPokemon; i++){
-				if (player.curPos.x == pokemonTab[i].curPos.x && player.curPos.y == pokemonTab[i].curPos.y)
-				{
+					//if (pokemonTab[i].catched) continue;
+
+					if (player.curPos.x == pokemonTab[i].curPos.x && player.curPos.y == pokemonTab[i].curPos.y)
+					{
+						pokemonCollidId = i;
+						break;
+					}
+					else
+					{
+
+						displayCharacter(pokemonTab[i].curPos.x, pokemonTab[i].curPos.y + textOffset, ' ');
+						pokemonMove(&pokemonTab[i], MAP_WIDTH, MAP_HEIGHT, textOffset);
+						displayCharacter(pokemonTab[i].curPos.x, pokemonTab[i].curPos.y + textOffset, '&');
+
+						if (player.curPos.x == pokemonTab[i].curPos.x && player.curPos.y == pokemonTab[i].curPos.y) {
+							pokemonCollidId = i;
+							break;
+						}
+					}
+				}
+
+				if(pokemonCollidId != -1) {
+
 					//passage nouvel écran
 					ConsoleUtils::clear();
 					displayScreen(interactionScreen, MAP_WIDTH, INTERACTION_HEIGHT, 0, 0);	
 					
-					//fuite 
-					if(meetPokemon(map, MAP_WIDTH, MAP_HEIGHT, textOffset, player, pokemonTab[i])==3){
-						pokemonMove(&pokemonTab[i], MAP_WIDTH, MAP_HEIGHT, textOffset);
+					setDegatCoef(&player.teamPokemon[0], &pokemonTab[pokemonCollidId]);
+
+					//fuite
+					//pokemonTab[pokemonCollidId].catched = true;
+					if(meetPokemon(map, MAP_WIDTH, MAP_HEIGHT, textOffset, player, pokemonTab[pokemonCollidId])==3) {
+						// pokemonMove(&pokemonTab[i], MAP_WIDTH, MAP_HEIGHT, textOffset);
 						displayMap(map, MAP_WIDTH, MAP_HEIGHT, textOffset);
 						displayCharacter(player.curPos.x, player.curPos.y + textOffset, player.skin);
-						for(int i=0; i<numberPokemon; i++){
-						displayCharacter(pokemonTab[i].curPos.x, pokemonTab[i].curPos.y + textOffset, '&');
+						for(int i=0; i<numberPokemon; i++) {
+							//if (!pokemonTab[i].catched) {
+								displayCharacter(pokemonTab[i].curPos.x, pokemonTab[i].curPos.y + textOffset, '&');
+							//}
 						}
-					};	
-					
-				}
-				else
-				{
-					
-					displayCharacter(pokemonTab[i].curPos.x, pokemonTab[i].curPos.y + textOffset, ' ');
-					pokemonMove(&pokemonTab[i], MAP_WIDTH, MAP_HEIGHT, textOffset);
-					displayCharacter(pokemonTab[i].curPos.x, pokemonTab[i].curPos.y + textOffset, '&');
-		
-				}
-				}
+					};
+				}	
+				
 			}
 			else if (c == ' ')
 			{
@@ -98,10 +127,19 @@ int main()
 
 
 int meetPokemon(char *screen, int MAP_WIDTH, int MAP_HEIGHT, int textOffset, Player player, Pokemon pokemon){
+
 	displayActionChoice(MAP_WIDTH);
+
+	std::cout << std::endl;		
+	std::cout << player.teamPokemon[0].pkName << "  " << player.teamPokemon[0].pv << "  " << player.teamPokemon[0].atk << player.teamPokemon[0].def << "  " << player.teamPokemon[0].typeName << "  " << player.teamPokemon[0].pkName << "  " << player.teamPokemon[0].degatCoef << "   " << player.teamPokemon[0].typeNumber << std::endl;
+
+	std::cout << std::endl;	
+
+	std::cout << pokemon.pkName << "  " << pokemon.pv << "  " << pokemon.atk << pokemon.def << "  " << pokemon.typeName << "  " << pokemon.pkName << "  " << pokemon.degatCoef << "   " << pokemon.typeNumber << std::endl;
+
 	int arrowChoice;
 	do{ 
-	bool special = false;
+	bool special = false; 
 	arrowChoice = ConsoleUtils::getChar(&special);
 	} while(arrowChoice != ConsoleUtils::KEY_UP && arrowChoice != ConsoleUtils::KEY_DOWN && arrowChoice != ConsoleUtils::KEY_LEFT && arrowChoice != ConsoleUtils::KEY_RIGHT);
 	switch (arrowChoice){

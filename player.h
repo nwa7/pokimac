@@ -3,15 +3,26 @@
 
 
 #include "position.h"
+#include "pokemon.h"
 
-struct Player
+/*struct Player
 {
 	Position curPos;
 	char skin;
 	int pv;
-};
+	bool active;
+};*/
 
-Player initPlayer(int x, int y, char skin, int pv);
+struct Player
+{
+	char const* name;
+	Position curPos;
+	char skin;
+	Pokemon *teamPokemon; 
+};
+typedef struct Player Player;
+
+Player initPlayer(int x, int y, char skin, Pokemon starterPokemon);
 void playerMove(Player *player, int c, int MAP_HEIGHT, int MAP_WIDTH, int textOffset);
 
 #endif

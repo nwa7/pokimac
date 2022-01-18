@@ -1,13 +1,24 @@
 #include "consoleUtils.hpp"
 #include "player.h"
 #include "interface.h"
+#include "pokemon.h"
 
-Player initPlayer(int x, int y, char skin, int pv){
+/*Player initPlayer(int x, int y, char skin, int pv){
 	Player player;
 	player.curPos.x = x;
 	player.curPos.y = y;
 	player.skin = skin;
 	player.pv = pv;
+	return player;
+}*/
+
+Player initPlayer(int x, int y, char skin, Pokemon starterPokemon){
+	Player player;
+	player.curPos.x = x;
+	player.curPos.y = y;
+	player.skin = skin;
+	player.teamPokemon = (Pokemon *)malloc(sizeof(Pokemon) * 6);
+	player.teamPokemon[0] = starterPokemon;
 	return player;
 }
 
@@ -40,6 +51,8 @@ void playerMove(Player *player, int c, int MAP_HEIGHT, int MAP_WIDTH, int textOf
 	if (oldPos.x != player->curPos.x || oldPos.y != player->curPos.y){
 	
 		displayCharacter(oldPos.x, oldPos.y + textOffset, ' ');
-		displayCharacter(player->curPos.x, player->curPos.y + textOffset, player->skin);				
+		ConsoleUtils::setColor(ConsoleUtils::Color::CYAN); 
+		displayCharacter(player->curPos.x, player->curPos.y + textOffset, player->skin);	
+		ConsoleUtils::resetColors();			
 	}
 }

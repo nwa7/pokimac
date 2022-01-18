@@ -10,7 +10,7 @@
 
 
 CC=g++
-CFLAGS=-Wall
+CFLAGS=-Wall -g
 
 game: main.o interface.o player.o pokemon.o
 	$(CC) -o $@ $^
