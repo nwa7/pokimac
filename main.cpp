@@ -4,7 +4,7 @@
 #include "interface.h"
 #include "player.h"
 #include "pokemon.h"
-#include "combat.h"
+#include "inventory.h"
 
 using std::cin;
 using std::cout;
@@ -50,6 +50,7 @@ int main(){
 	ConsoleUtils::setColor(ConsoleUtils::Color::CYAN); 
 	displayCharacter(player.curPos.x, player.curPos.y + textOffset, player.skin);
 	ConsoleUtils::resetColors();
+
 
 	//pokemon
 	Pokemon *pokemonTab = (Pokemon *)malloc(sizeof(Pokemon) * numberPokemon);
@@ -139,6 +140,9 @@ int main(){
 									displayPkStat(player.teamPokemon[0], pokemonTab[pokemonCollidId], MAP_WIDTH);
 									playerTour = false;
 								}
+							}
+							else if (meetPkmn == 0){
+								displayInventory(pokemonTab[pokemonCollidId], player, textOffset, &chosenone );
 							}
 						}
 						else{

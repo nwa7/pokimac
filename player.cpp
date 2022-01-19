@@ -17,7 +17,7 @@ Player initPlayer(int x, int y, char skin, Pokemon starterPokemon){
 	player.curPos.x = x;
 	player.curPos.y = y;
 	player.skin = skin;
-	player.teamPokemon = (Pokemon *)malloc(sizeof(Pokemon) * 6);
+	player.teamPokemon = (Pokemon *)calloc(6,sizeof(Pokemon));
 	player.teamPokemon[0] = starterPokemon;
 	return player;
 }
