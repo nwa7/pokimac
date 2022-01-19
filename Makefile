@@ -31,6 +31,6 @@ combat.o: combat.cpp consoleUtils.hpp combat.h
 	$(CC) -o $@ -c $< $(CFLAGS)	
 
 clean:
-	rm -rf *.o
+	rm -rf *.o game
 
 

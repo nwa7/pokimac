@@ -7,14 +7,6 @@ char const *pkType[] = {"Maths", "Programmation", "Audiovisuel", "Media", "Image
 
 float tabDegatCoef[5][5] = {{0.5, 1, 1, 2, 0.5}, {1, 0.5, 0.5, 1, 2}, {1, 2, 0.5, 0.5, 1}, {0.5, 1, 2, 0.5, 1},{2, 0.5, 1, 1, 0.5}}; 
 
-/*Pokemon initPokemon(int x, int y, char skin, int hp){
-	Pokemon pokemon;
-	pokemon.curPos.x = x;
-	pokemon.curPos.y = y;
-	pokemon.skin = skin;
-	pokemon.hp = hp;
-	return pokemon;
-}*/
 
 Pokemon initPokemon(int x, int y, char skin, int hp, int atkIndex, int defIndex, int nameIndex){
 	Pokemon pokemon;
@@ -28,6 +20,7 @@ Pokemon initPokemon(int x, int y, char skin, int hp, int atkIndex, int defIndex,
 	pokemon.typeNumber = nameIndex/2;
 	pokemon.typeName = pkType[nameIndex/2];
 	pokemon.pkName = pkName[nameIndex];
+	pokemon.active = true;
 	return pokemon;
 }
 
