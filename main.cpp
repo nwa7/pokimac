@@ -133,6 +133,7 @@ int main(){
 
 								Attack(&player.teamPokemon[0], &pokemonTab[pokemonCollidId]);
 								if(pokemonTab[pokemonCollidId].hp < 0){
+									pokemonTab[pokemonCollidId].hp=0;
 									meetOver = true; 
 								}else { 
 									displayPkStat(player.teamPokemon[0], pokemonTab[pokemonCollidId], MAP_WIDTH);
@@ -144,6 +145,7 @@ int main(){
 
 							Attack(&pokemonTab[pokemonCollidId], &player.teamPokemon[0]);
 							if (player.teamPokemon[0].hp < 0){
+								player.teamPokemon[0].hp=0;
 								meetOver = true;
 							}
 							else{
@@ -151,6 +153,14 @@ int main(){
 								playerTour = true;
 							}
 						}
+						
+					}
+					displayMap(map, MAP_WIDTH, MAP_HEIGHT, textOffset);
+					displayCharacter(player.curPos.x, player.curPos.y + textOffset, player.skin);
+					for (int i = 0; i < numberPokemon; i++){
+					//if (!pokemonTab[i].catched) {
+					displayCharacter(pokemonTab[i].curPos.x, pokemonTab[i].curPos.y + textOffset, '&');
+					//}
 					}
 				}
 				
