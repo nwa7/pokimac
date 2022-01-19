@@ -13,6 +13,7 @@ using std::endl;
 const int MAP_WIDTH = 80;
 const int MAP_HEIGHT = 20;
 const int INTERACTION_HEIGHT = 10;
+int chosenone = 0;	
 
 
 int meetPokemon(char *screen, int MAP_WIDTH, int MAP_HEIGHT, int textOffset, Player player, Pokemon pokemon);
@@ -113,7 +114,7 @@ int main()
 						}
 					}
 					else if(meetPkmn==1){
-						displayFight(pokemonTab[pokemonCollidId], player, textOffset ); 
+						displayFight(pokemonTab[pokemonCollidId], player, textOffset, &chosenone ); 
 					}
 				}	
 				

@@ -1,12 +1,13 @@
-const int MAP_WIDTH = 80;
-const int MAP_HEIGHT = 20;
-const int INTERACTION_HEIGHT = 10;
-
 #include "consoleUtils.hpp"
 #include "interface.h"
 #include "player.h"
 #include "pokemon.h"
 #include "position.h"
+
+const int MAP_WIDTH = 80;
+const int MAP_HEIGHT = 20;
+const int INTERACTION_HEIGHT = 10;
+
 
 void displayActionChoice2(int MAP_WIDTH){
 
@@ -40,7 +41,7 @@ int fightChoice(){
 		}
 }
 
-void displayFight(Pokemon pokemon, Player player, int textOffset ){
+void displayFight(Pokemon pokemon, Player player, int textOffset, int * chosenone ){
 	
     ConsoleUtils::clear();
 	//init screen interaction rencontre pokemon
@@ -57,14 +58,12 @@ void displayFight(Pokemon pokemon, Player player, int textOffset ){
 	//passage nouvel écran
 	int fightchoice= fightChoice();
 	if(fightchoice==1) {
-		int chosenone = 0; /*** à déclarer dans le main je pense mais pour les besoins des tests c'est ici***/
-		pokemon.hp-=(player.teamPokemon[chosenone].atk ) * player.teamPokemon[chosenone].degatCoef;
-		displayFight(pokemon, player, textOffset);
+		pokemon.hp-=(player.teamPokemon[*chosenone].atk ) * player.teamPokemon[*chosenone].degatCoef;
+		displayFight(pokemon, player, textOffset, chosenone);
 	}
 	else if(fightchoice==3){
-		int chosenone = 0;
-		player.teamPokemon[chosenone].hp += (player.teamPokemon[chosenone].atk)/2; /*** valeurs totalement pas pensées, A REVOIR ***/
-		displayFight(pokemon, player, textOffset ); 
+		player.teamPokemon[*chosenone].hp += (player.teamPokemon[*chosenone].atk)/2; /*** valeurs totalement pas pensées, A REVOIR ***/
+		displayFight(pokemon, player, textOffset, chosenone ); 
 	}
 	
 	ConsoleUtils::clear();
