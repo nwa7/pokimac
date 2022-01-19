@@ -121,3 +121,11 @@ void displayPkStat(Pokemon playerPokemon, Pokemon enemyPokemon, int MAP_WIDTH){
 	cout << "]" << std::flush;
 
 }
+
+void cleanMessageArea(int width, int height){
+ConsoleUtils::setCursorPos(0, height);
+for(int i=0; i<width; i++){
+	cout << " ";
+}
+ConsoleUtils::setCursorPos(0, height);
+}
