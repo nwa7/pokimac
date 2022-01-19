@@ -9,7 +9,7 @@
 {
 	Position curPos;
 	char skin;
-	int pv;
+	int hp;
 	bool active;
 };*/
 

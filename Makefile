@@ -12,7 +12,7 @@
 CC=g++
 CFLAGS=-Wall -g
 
-game: main.o interface.o player.o pokemon.o
+game: main.o interface.o player.o pokemon.o combat.o
 	$(CC) -o $@ $^
 	
 main.o: main.cpp player.h pokemon.h interface.h consoleUtils.hpp
@@ -25,6 +25,9 @@ pokemon.o: pokemon.cpp pokemon.h
 	$(CC) -o $@ -c $< $(CFLAGS)	
 
 interface.o: interface.cpp consoleUtils.hpp interface.h
+	$(CC) -o $@ -c $< $(CFLAGS)	
+
+combat.o: combat.cpp consoleUtils.hpp combat.h
 	$(CC) -o $@ -c $< $(CFLAGS)	
 
 clean:

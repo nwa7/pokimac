@@ -4,6 +4,7 @@
 #include "interface.h"
 #include "player.h"
 #include "pokemon.h"
+#include "combat.h"
 
 using std::cin;
 using std::cout;
@@ -92,16 +93,16 @@ int main()
 				}
 
 				if(pokemonCollidId != -1) {
-
 					//passage nouvel écran
 					ConsoleUtils::clear();
 					displayScreen(interactionScreen, MAP_WIDTH, INTERACTION_HEIGHT, 0, 0);	
 					
 					setDegatCoef(&player.teamPokemon[0], &pokemonTab[pokemonCollidId]);
-
+					
+					int meetPkmn= meetPokemon(map, MAP_WIDTH, MAP_HEIGHT, textOffset, player, pokemonTab[pokemonCollidId]);
 					//fuite
 					//pokemonTab[pokemonCollidId].catched = true;
-					if(meetPokemon(map, MAP_WIDTH, MAP_HEIGHT, textOffset, player, pokemonTab[pokemonCollidId])==3) {
+					if(meetPkmn==3) {
 						// pokemonMove(&pokemonTab[i], MAP_WIDTH, MAP_HEIGHT, textOffset);
 						displayMap(map, MAP_WIDTH, MAP_HEIGHT, textOffset);
 						displayCharacter(player.curPos.x, player.curPos.y + textOffset, player.skin);
@@ -110,7 +111,10 @@ int main()
 								displayCharacter(pokemonTab[i].curPos.x, pokemonTab[i].curPos.y + textOffset, '&');
 							//}
 						}
-					};
+					}
+					else if(meetPkmn==1){
+						displayFight(pokemonTab[pokemonCollidId], player, textOffset ); 
+					}
 				}	
 				
 			}
@@ -129,13 +133,12 @@ int main()
 int meetPokemon(char *screen, int MAP_WIDTH, int MAP_HEIGHT, int textOffset, Player player, Pokemon pokemon){
 
 	displayActionChoice(MAP_WIDTH);
-
 	std::cout << std::endl;		
-	std::cout << player.teamPokemon[0].pkName << "  " << player.teamPokemon[0].pv << "  " << player.teamPokemon[0].atk << player.teamPokemon[0].def << "  " << player.teamPokemon[0].typeName << "  " << player.teamPokemon[0].pkName << "  " << player.teamPokemon[0].degatCoef << "   " << player.teamPokemon[0].typeNumber << std::endl;
+	std::cout << player.teamPokemon[0].pkName << "  " << player.teamPokemon[0].hp << "  " << player.teamPokemon[0].atk << player.teamPokemon[0].def << "  " << player.teamPokemon[0].typeName << "  " << player.teamPokemon[0].pkName << "  " << player.teamPokemon[0].degatCoef << "   " << player.teamPokemon[0].typeNumber << std::endl;
 
 	std::cout << std::endl;	
 
-	std::cout << pokemon.pkName << "  " << pokemon.pv << "  " << pokemon.atk << pokemon.def << "  " << pokemon.typeName << "  " << pokemon.pkName << "  " << pokemon.degatCoef << "   " << pokemon.typeNumber << std::endl;
+	std::cout << pokemon.pkName << "  " << pokemon.hp << "  " << pokemon.atk << pokemon.def << "  " << pokemon.typeName << "  " << pokemon.pkName << "  " << pokemon.degatCoef << "   " << pokemon.typeNumber << std::endl;
 
 	int arrowChoice;
 	do{ 
@@ -155,7 +158,7 @@ int meetPokemon(char *screen, int MAP_WIDTH, int MAP_HEIGHT, int textOffset, Pla
 		case ConsoleUtils::KEY_RIGHT:
 			return 3;
 		default:
-			break;
+			return -1 ;
 	}
 	
 }

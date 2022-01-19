@@ -3,12 +3,12 @@
 #include "interface.h"
 #include "pokemon.h"
 
-/*Player initPlayer(int x, int y, char skin, int pv){
+/*Player initPlayer(int x, int y, char skin, int hp){
 	Player player;
 	player.curPos.x = x;
 	player.curPos.y = y;
 	player.skin = skin;
-	player.pv = pv;
+	player.hp = hp;
 	return player;
 }*/
 

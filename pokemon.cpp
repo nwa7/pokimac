@@ -7,21 +7,21 @@ char const *pkType[] = {"Maths", "Programmation", "Audiovisuel", "Media", "Image
 
 float tabDegatCoef[5][5] = {{0.5, 1, 1, 2, 0.5}, {1, 0.5, 0.5, 1, 2}, {1, 2, 0.5, 0.5, 1}, {0.5, 1, 2, 0.5, 1},{2, 0.5, 1, 1, 0.5}}; 
 
-/*Pokemon initPokemon(int x, int y, char skin, int pv){
+/*Pokemon initPokemon(int x, int y, char skin, int hp){
 	Pokemon pokemon;
 	pokemon.curPos.x = x;
 	pokemon.curPos.y = y;
 	pokemon.skin = skin;
-	pokemon.pv = pv;
+	pokemon.hp = hp;
 	return pokemon;
 }*/
 
-Pokemon initPokemon(int x, int y, char skin, int pv, int atkIndex, int defIndex, int nameIndex){
+Pokemon initPokemon(int x, int y, char skin, int hp, int atkIndex, int defIndex, int nameIndex){
 	Pokemon pokemon;
 	pokemon.curPos.x = x;
 	pokemon.curPos.y = y;
 	pokemon.skin = skin;
-	pokemon.pv = pv;
+	pokemon.hp = hp;
 	pokemon.atk = pkStat[atkIndex];
 	pokemon.def = pkStat[defIndex];
 	pokemon.degatCoef = 1;
