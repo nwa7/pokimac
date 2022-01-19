@@ -140,16 +140,13 @@ int main(){
 								}
 							}
 						}
-						else
-						{
+						else{
 
 							Attack(&pokemonTab[pokemonCollidId], &player.teamPokemon[0]);
-							if (player.teamPokemon[0].hp < 0)
-							{
+							if (player.teamPokemon[0].hp < 0){
 								meetOver = true;
 							}
-							else
-							{
+							else{
 								displayPkStat(player.teamPokemon[0], pokemonTab[pokemonCollidId], MAP_WIDTH);
 								playerTour = true;
 							}
