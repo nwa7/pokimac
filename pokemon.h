@@ -14,6 +14,7 @@ struct Pokemon
 	char const *pkName; 
 	float degatCoef;
 	int typeNumber;
+	bool active;
 };
 typedef struct Pokemon Pokemon;
 

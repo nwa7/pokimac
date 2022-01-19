@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string.h>
 #include "consoleUtils.hpp"
 #include "interface.h"
 #include "player.h"
@@ -36,7 +37,7 @@ void initFightScreen(char *tab, int width, int height, Player player, Pokemon po
 		tab[2 * width-len_name-1+k] = name_pokemon[k];
 	}
 
-	tab[2 * width + 1] = '[' ;
+	tab[2 * width + 1] = '[' ; 
 	for (size_t k = 0; k < 10; k++){
 		tab[2 * width + k + 2] = k < pokemon_life / 10 ? '#' : ' ' ;
 	}
@@ -80,4 +81,43 @@ void displayActionChoice(int MAP_WIDTH, int y){
 	for (int i = 0; i < MAP_WIDTH; i++){
 		std::cout << "-";
 	}
+}
+
+
+void displayPkStat(Pokemon playerPokemon, Pokemon enemyPokemon, int MAP_WIDTH){
+
+	int enemypkLifeLen = enemyPokemon.hp/10; 
+
+	ConsoleUtils::setCursorPos(3, 4);
+	std::cout << enemyPokemon.pkName;
+	ConsoleUtils::setCursorPos(3, 5);
+	std::cout << "                   ";
+	ConsoleUtils::setCursorPos(3, 5);
+	std::cout << (int) enemyPokemon.hp;
+	ConsoleUtils::setCursorPos(6, 5);
+	std::cout << "  [";
+	for(int i = 0; i<enemypkLifeLen; i++){ 
+		std::cout << "#";
+	}
+	ConsoleUtils::setCursorPos(enemypkLifeLen+9, 5);
+	std::cout << "]";
+	
+
+	int nameLen = strlen(playerPokemon.pkName);
+	int playerpkLifeLen = playerPokemon.hp/10; 
+	
+	ConsoleUtils::setCursorPos(MAP_WIDTH - nameLen - 3, 8);
+	std::cout << playerPokemon.pkName;
+	ConsoleUtils::setCursorPos(MAP_WIDTH - 23, 9);
+	std::cout << "                      ";
+	ConsoleUtils::setCursorPos(MAP_WIDTH - 6 , 9);
+	cout << (int) playerPokemon.hp;
+
+	ConsoleUtils::setCursorPos(MAP_WIDTH - 10 - playerpkLifeLen , 9);	
+	cout << "[";
+	for(int i=0; i<playerpkLifeLen; i++){
+		cout << "#";
+	}
+	cout << "]" << std::flush;
+
 }

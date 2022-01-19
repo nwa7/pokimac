@@ -31,6 +31,6 @@ inventory.o: inventory.cpp consoleUtils.hpp inventory.h
 	$(CC) -o $@ -c $< $(CFLAGS)	
 
 clean:
-	rm -rf *.o
+	rm -rf *.o game
 
 
