@@ -10,4 +10,5 @@ void displayMap(char *map, int MAP_WIDTH, int MAP_HEIGHT, int textOffset);
 void displayActionChoice(int MAP_WIDTH, int y);
 void displayCharacter(int x, int y, char skin);
 void displayPkStat(Pokemon playerPokemon, Pokemon enemyPokemon, int MAP_WIDTH);
+void cleanMessageArea(int width, int height);
 #endif
