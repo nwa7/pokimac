@@ -17,6 +17,7 @@ int chosenone = 0;
 
 
 int meetPokemon(char *screen, int MAP_WIDTH, int MAP_HEIGHT, int textOffset, Player player, Pokemon pokemon);
+void Attaque(Pokemon *fightingPokemon, Pokemon *enemyPokemon);
 int main()
 {
 	ConsoleUtils::clear();
@@ -97,6 +98,12 @@ int main()
 					//passage nouvel écran
 					ConsoleUtils::clear();
 					displayScreen(interactionScreen, MAP_WIDTH, INTERACTION_HEIGHT, 0, 0);	
+
+					ConsoleUtils::setCursorPos(3, 4);	
+					std::cout << pokemonTab[pokemonCollidId].pkName << "   " << pokemonTab[pokemonCollidId].hp;
+
+					ConsoleUtils::setCursorPos(MAP_WIDTH - 20 , 9);	
+					std::cout << "  " <<player.teamPokemon[0].hp  << "  " << player.teamPokemon[0].pkName ;
 					
 					setDegatCoef(&player.teamPokemon[0], &pokemonTab[pokemonCollidId]);
 					
@@ -114,7 +121,15 @@ int main()
 						}
 					}
 					else if(meetPkmn==1){
-						displayFight(pokemonTab[pokemonCollidId], player, textOffset, &chosenone ); 
+						//displayFight(pokemonTab[pokemonCollidId], player, textOffset, &chosenone ); 
+						Attaque(&player.teamPokemon[0], &pokemonTab[pokemonCollidId]);
+						ConsoleUtils::setCursorPos(3, 4);
+						std: cout << "                          ";	
+						ConsoleUtils::setCursorPos(3, 4);
+						std::cout << pokemonTab[pokemonCollidId].pkName << "   " << pokemonTab[pokemonCollidId].hp;
+
+						ConsoleUtils::setCursorPos(MAP_WIDTH - 20 , 9);	
+						std::cout << "  " <<player.teamPokemon[0].hp  << "  " << player.teamPokemon[0].pkName ;
 					}
 				}	
 				
@@ -133,7 +148,8 @@ int main()
 
 int meetPokemon(char *screen, int MAP_WIDTH, int MAP_HEIGHT, int textOffset, Player player, Pokemon pokemon){
 
-	displayActionChoice(MAP_WIDTH);
+	displayActionChoice(MAP_WIDTH, INTERACTION_HEIGHT+2 );
+
 	std::cout << std::endl;		
 	std::cout << player.teamPokemon[0].pkName << "  " << player.teamPokemon[0].hp << "  " << player.teamPokemon[0].atk << player.teamPokemon[0].def << "  " << player.teamPokemon[0].typeName << "  " << player.teamPokemon[0].pkName << "  " << player.teamPokemon[0].degatCoef << "   " << player.teamPokemon[0].typeNumber << std::endl;
 
@@ -162,4 +178,8 @@ int meetPokemon(char *screen, int MAP_WIDTH, int MAP_HEIGHT, int textOffset, Pla
 			return -1 ;
 	}
 	
+}
+
+void Attaque(Pokemon *fightingPokemon, Pokemon *enemyPokemon){
+	enemyPokemon->hp-= ((fightingPokemon->atk * fightingPokemon->degatCoef)/ ((enemyPokemon->def) /10));
 }
