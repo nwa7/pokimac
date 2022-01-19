@@ -109,7 +109,6 @@ int main()
 					std::cout << pokemonTab[pokemonCollidId].pkName << "  " << pokemonTab[pokemonCollidId].hp << "  " << pokemonTab[pokemonCollidId].atk << "  " << pokemonTab[pokemonCollidId].def << "  " << pokemonTab[pokemonCollidId].typeName << "  " << pokemonTab[pokemonCollidId].pkName << "  " << pokemonTab[pokemonCollidId].degatCoef << "   " << pokemonTab[pokemonCollidId].typeNumber << std::endl;
 					//FIN TEST
 
-
 					ConsoleUtils::setCursorPos(3, 4);	
 					std::cout << pokemonTab[pokemonCollidId].pkName << "   " << pokemonTab[pokemonCollidId].hp;
 
@@ -117,8 +116,8 @@ int main()
 					std::cout << "  " <<player.teamPokemon[0].hp  << "  " << player.teamPokemon[0].pkName ;
 					
 					setDegatCoef(&player.teamPokemon[0], &pokemonTab[pokemonCollidId]);
+					int meetPkmn= meetPokemon(map, MAP_WIDTH, MAP_HEIGHT, textOffset, player, pokemonTab[pokemonCollidId]); 
 					
-					int meetPkmn= meetPokemon(map, MAP_WIDTH, MAP_HEIGHT, textOffset, player, pokemonTab[pokemonCollidId]);
 					//fuite
 					//pokemonTab[pokemonCollidId].catched = true;
 					if(meetPkmn==3) {
@@ -142,6 +141,7 @@ int main()
 						ConsoleUtils::setCursorPos(MAP_WIDTH - 20 , 9);	
 						std::cout << "  " <<player.teamPokemon[0].hp  << "  " << player.teamPokemon[0].pkName ;
 					}
+					
 				}	
 				
 			}
