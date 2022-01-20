@@ -85,7 +85,7 @@ void displayCharacter(int x, int y, char skin){
 void displayActionChoice(int MAP_WIDTH, int y){
 	ConsoleUtils::setCursorPos(0, y);
 	std::cout << std::endl << "What will you do?" << std::endl;
-	std::cout << std::endl << "<- POKEMON" <<"              "<<"ATTACK v" << "               "<<"INVENTORY ^"<<"              "<<"FLY AWAY ->" << std::endl;
+	std::cout << std::endl << "<- POKEMON" <<"             "<<"ATTACK v" << "             "<<"INVENTORY ^"<<"             "<<"FLY AWAY ->" << std::endl;
 	for (int i = 0; i < MAP_WIDTH; i++){
 		std::cout << "-";
 	}
@@ -99,10 +99,12 @@ void displayPkStat(Pokemon playerPokemon, Pokemon enemyPokemon, int MAP_WIDTH){
 	ConsoleUtils::setCursorPos(3, 4);
 	std::cout << enemyPokemon.pkName;
 	ConsoleUtils::setCursorPos(3, 5);
+	std::cout << "[" << enemyPokemon.typeName << "]";
+	ConsoleUtils::setCursorPos(3, 6);
 	std::cout << "                   ";
-	ConsoleUtils::setCursorPos(3, 5);
+	ConsoleUtils::setCursorPos(3, 6);
 	std::cout << (int) enemyPokemon.hp;
-	ConsoleUtils::setCursorPos(6, 5);
+	ConsoleUtils::setCursorPos(6, 6);
 	std::cout << "  [";
 	for(int i = 0; i<10; i++){ 
 		if (i < enemypkLifeLen){
@@ -112,15 +114,18 @@ void displayPkStat(Pokemon playerPokemon, Pokemon enemyPokemon, int MAP_WIDTH){
 			std::cout << ' ';
 		}
 	}
-	ConsoleUtils::setCursorPos(10 + 9, 5);
+	ConsoleUtils::setCursorPos(10 + 9, 6);
 	std::cout << "]";
 	
 
 	int nameLen = strlen(playerPokemon.pkName);
+	int typeLen = strlen(playerPokemon.typeName);
 	int playerpkLifeLen = playerPokemon.hp/10; 
 	
-	ConsoleUtils::setCursorPos(MAP_WIDTH - nameLen - 3, 8);
+	ConsoleUtils::setCursorPos(MAP_WIDTH - nameLen - 3, 7);
 	std::cout << playerPokemon.pkName;
+	ConsoleUtils::setCursorPos(MAP_WIDTH - typeLen - 5, 8);
+	std::cout << "[" << playerPokemon.typeName << "]";
 	ConsoleUtils::setCursorPos(MAP_WIDTH - 23, 9);
 	std::cout << "                      ";
 	ConsoleUtils::setCursorPos(MAP_WIDTH - 6 , 9);
