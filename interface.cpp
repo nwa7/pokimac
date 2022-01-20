@@ -77,7 +77,7 @@ void displayCharacter(int x, int y, char skin){
 void displayActionChoice(int MAP_WIDTH, int y){
 	ConsoleUtils::setCursorPos(0, y);
 	std::cout << std::endl << "What will you do?" << std::endl;
-	std::cout << std::endl << "<- POKEMON" <<"              "<<"FIGHT v" << "               "<<"CAPTURE ^"<<"              "<<"FLY AWAY ->" << std::endl;
+	std::cout << std::endl << "<- POKEMON" <<"              "<<"ATTACK v" << "               "<<"INVENTORY ^"<<"              "<<"FLY AWAY ->" << std::endl;
 	for (int i = 0; i < MAP_WIDTH; i++){
 		std::cout << "-";
 	}

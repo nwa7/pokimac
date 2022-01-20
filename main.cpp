@@ -17,6 +17,7 @@ const int MAP_WIDTH = 80;
 const int MAP_HEIGHT = 20;
 const int INTERACTION_HEIGHT = 10;
 int chosenone = 0;
+int nbpotion = 2;
 
 int meetPokemon(char *screen, int MAP_WIDTH, int MAP_HEIGHT, int textOffset, Player player, Pokemon pokemon);
 void Attack(Pokemon *fightingPokemon, Pokemon *enemyPokemon);

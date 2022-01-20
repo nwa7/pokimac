@@ -1,4 +1,5 @@
 #include <random>
+#include <unistd.h>
 #include "consoleUtils.hpp"
 #include "interface.h"
 #include "player.h"
@@ -20,27 +21,24 @@ void displayActionChoice2(int MAP_WIDTH){
 }
 
 int Choice(){
-	int arrowChoice;
-		do{ 
+	int arrowChoice = -1;
+	do{ 
 		bool special = false; 
 		arrowChoice = ConsoleUtils::getChar(&special);
-		} while(arrowChoice != ConsoleUtils::KEY_UP && arrowChoice != ConsoleUtils::KEY_DOWN && arrowChoice != ConsoleUtils::KEY_LEFT && arrowChoice != ConsoleUtils::KEY_RIGHT);
-		switch (arrowChoice){
-			case ConsoleUtils::KEY_UP:
-				return 0;
+	} while(arrowChoice != ConsoleUtils::KEY_UP && arrowChoice != ConsoleUtils::KEY_DOWN && arrowChoice != ConsoleUtils::KEY_LEFT);
+	switch (arrowChoice){
+		case ConsoleUtils::KEY_UP:
+			return 0;
 
-			case ConsoleUtils::KEY_DOWN:
-				return 1;
+		case ConsoleUtils::KEY_DOWN:
+			return 1;
 
-			case ConsoleUtils::KEY_LEFT:
-				return 2;
+		case ConsoleUtils::KEY_LEFT:
+			return 2;
 
-			case ConsoleUtils::KEY_RIGHT:
-				return 3;
-
-			default:
-				return -1 ;
-		}
+		default:
+			return -1 ;
+	}
 }
 bool capture(Pokemon pokemon){
 	int luck= rand() % 100;
@@ -74,41 +72,47 @@ void displayInventory(Pokemon pokemon, Player player, int textOffset, int * chos
 	std::cout << std::endl;	
 	std::cout << pokemon.pkName << "  " << pokemon.hp << "  " << pokemon.atk << pokemon.def << "  " << pokemon.typeName << "  " << pokemon.pkName << "  " << pokemon.degatCoef << "   " << pokemon.typeNumber << std::endl;
 	 
-	int fightchoice= Choice();
+	// Inventory menu loop	
+	for(;;)
+	{
+		// Inventory action choice
+		int inventoryChoice = Choice();
+		// Potion action
+		if(inventoryChoice==0) {
+			player.teamPokemon[*chosenone].hp += 20; 
+		}
+		// Capture action
+		else if(inventoryChoice==1){
+			// Good chance to capture pokemon (return 1 if captured)
+			bool captured = capture(pokemon);
+			// Check if a stash is available for a new pokemon (return index in team pokemon)
+			int spareplace = sparePlace(player);
 
-	std::cout << fightchoice << std::endl;
-
-	if(fightchoice==2) {	
-	}
-	else if(fightchoice==1){
-		ConsoleUtils::clear();
-		bool captured = capture(pokemon);
-		int spareplace = sparePlace(player);
-		std::cout << spareplace<< std::endl;
-		if (captured == 1 && spareplace != -1 ){
-			std::cout << "Pokemon capturé !"<< std::endl;		
+			if (captured == 1 && spareplace != -1 ){
+				std::cout << "Pokemon capturé !"<< std::endl;		
+			}
+			else if (captured == 0) {
+				std::cout << "La capture du pokemon a échoué" << std::endl;
+			}
+			else if (spareplace==-1){
+				std::cout << "Team pokemon pleine" << std::endl;
+			}
 		}
-		else if (captured == 0) {
-			std::cout << "La capture du pokemon a échoué" << std::endl;
+		// Leave inventory -> to fight menu
+		else if (inventoryChoice == 2)
+		{
+			#if 0
+			ConsoleUtils::clear();
+			displayScreen(fightScreen, MAP_WIDTH, INTERACTION_HEIGHT, 0, 0+textOffset);
+			displayActionChoice2(MAP_WIDTH);
+			
+			std::cout << std::endl;		
+			std::cout << player.teamPokemon[0].pkName << "  " << player.teamPokemon[0].hp << "  " << player.teamPokemon[0].atk << player.teamPokemon[0].def << "  " << player.teamPokemon[0].typeName << "  " << player.teamPokemon[0].pkName << "  " << player.teamPokemon[0].degatCoef << "   " << player.teamPokemon[0].typeNumber << std::endl;
+			std::cout << std::endl;	
+			std::cout << pokemon.pkName << "  " << pokemon.hp << "  " << pokemon.atk << pokemon.def << "  " << pokemon.typeName << "  " << pokemon.pkName << "  " << pokemon.degatCoef << "   " << pokemon.typeNumber << std::endl;
+			#endif
+			break;
 		}
-		else if (spareplace==-1){
-			std::cout << "Team pokemon pleine" << std::endl;
-		}
-	}
-	else if(fightchoice==3){
-		std::cout << "Choice 3"<< std::endl;		
-		player.teamPokemon[*chosenone].hp += (player.teamPokemon[*chosenone].atk)/2; /*** valeurs totalement pas pensées, A REVOIR ***/
-	}
-	
-	ConsoleUtils::clear();
-	displayScreen(fightScreen, MAP_WIDTH, INTERACTION_HEIGHT, 0, 0+textOffset);
-	displayActionChoice2(MAP_WIDTH);
-	
-	std::cout << std::endl;		
-	std::cout << player.teamPokemon[0].pkName << "  " << player.teamPokemon[0].hp << "  " << player.teamPokemon[0].atk << player.teamPokemon[0].def << "  " << player.teamPokemon[0].typeName << "  " << player.teamPokemon[0].pkName << "  " << player.teamPokemon[0].degatCoef << "   " << player.teamPokemon[0].typeNumber << std::endl;
-	std::cout << std::endl;	
-	std::cout << pokemon.pkName << "  " << pokemon.hp << "  " << pokemon.atk << pokemon.def << "  " << pokemon.typeName << "  " << pokemon.pkName << "  " << pokemon.degatCoef << "   " << pokemon.typeNumber << std::endl;
-				
-					
+	}	
 }   
 
