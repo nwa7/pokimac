@@ -1,5 +1,6 @@
 #include <iostream>
 #include <random>
+
 #include "consoleUtils.hpp"
 #include "interface.h"
 #include "player.h"
@@ -103,8 +104,8 @@ int main(){
 				//passage nouvel écran
 				ConsoleUtils::clear();
 				displayScreen(interactionScreen, MAP_WIDTH, INTERACTION_HEIGHT, 0, 0);
-				displayActionChoice(MAP_WIDTH, INTERACTION_HEIGHT + 2);
-				displayPkStat(player.teamPokemon[0], pokemonTab[pokemonCollidId], MAP_WIDTH);
+				displayActionChoice(MAP_WIDTH, INTERACTION_HEIGHT + textOffset);
+				displayPkStat(player.teamPokemon[chosenone], pokemonTab[pokemonCollidId], MAP_WIDTH);
 
 				int meetPkmn = 0;
 				bool meetOver = false;
@@ -147,7 +148,11 @@ int main(){
 							}
 						}
 						else if (meetPkmn == 0){
-							displayInventory(pokemonTab[pokemonCollidId], player, textOffset, &chosenone, &bag, &meetOver );
+							displayInventory(pokemonTab + pokemonCollidId, &player, textOffset, &chosenone, &bag, &meetOver );
+						}  	                  // adresse du tableau à la position pkmncollidid
+						
+						else if (meetPkmn == 2){
+							displayteamPokemon(&player, textOffset, &chosenone);
 						}
 					
 					}

@@ -96,10 +96,15 @@ void displayPkStat(Pokemon playerPokemon, Pokemon enemyPokemon, int MAP_WIDTH){
 	std::cout << (int) enemyPokemon.hp;
 	ConsoleUtils::setCursorPos(6, 5);
 	std::cout << "  [";
-	for(int i = 0; i<enemypkLifeLen; i++){ 
-		std::cout << "#";
+	for(int i = 0; i<10; i++){ 
+		if (i < enemypkLifeLen){
+			std::cout << '#';
+		}
+		else {
+			std::cout << ' ';
+		}
 	}
-	ConsoleUtils::setCursorPos(enemypkLifeLen+9, 5);
+	ConsoleUtils::setCursorPos(10 + 9, 5);
 	std::cout << "]";
 	
 
@@ -113,10 +118,15 @@ void displayPkStat(Pokemon playerPokemon, Pokemon enemyPokemon, int MAP_WIDTH){
 	ConsoleUtils::setCursorPos(MAP_WIDTH - 6 , 9);
 	cout << (int) playerPokemon.hp;
 
-	ConsoleUtils::setCursorPos(MAP_WIDTH - 10 - playerpkLifeLen , 9);	
+	ConsoleUtils::setCursorPos(MAP_WIDTH - 10 - 10 , 9);	
 	cout << "[";
-	for(int i=0; i<playerpkLifeLen; i++){
-		cout << "#";
+	for(int i=0; i<10; i++){
+		if (i < playerpkLifeLen){
+			std::cout << '#';
+		}
+		else {
+			std::cout << ' ';
+		}
 	}
 	cout << "]" << std::flush;
 
