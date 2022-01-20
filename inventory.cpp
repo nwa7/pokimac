@@ -1,14 +1,23 @@
 #include <random>
-#include <unistd.h>
+
 #include "consoleUtils.hpp"
 #include "interface.h"
-#include "player.h"
+#include "player.h" 
 #include "pokemon.h"
 #include "position.h"
+#include "inventory.h"
 
 const int MAP_WIDTH = 80;
 const int MAP_HEIGHT = 20;
 const int INTERACTION_HEIGHT = 10;
+
+
+Bag initBag(){
+	Bag bag;
+	bag.pokeball = 10;
+	bag.potion = 10;
+	return bag;
+}
 
 
 void displayActionChoice2(int MAP_WIDTH){
@@ -40,6 +49,7 @@ int Choice(){
 			return -1 ;
 	}
 }
+
 bool capture(Pokemon pokemon){
 	int luck= rand() % 100;
 	int weak=(100-pokemon.hp);
@@ -59,7 +69,8 @@ int sparePlace (Player player){
 	}
 	return -1;
 }
-void displayInventory(Pokemon pokemon, Player player, int textOffset, int * chosenone ){
+
+void displayInventory(Pokemon pokemon, Player player, int textOffset, int * chosenone, Bag *bag, bool * meetOver ){
 	
     ConsoleUtils::clear();
 	//init screen interaction rencontre pokemon
@@ -89,9 +100,16 @@ void displayInventory(Pokemon pokemon, Player player, int textOffset, int * chos
 			int spareplace = sparePlace(player);
 
 			if (captured == 1 && spareplace != -1 ){
-				std::cout << "Pokemon capturé !"<< std::endl;		
+				std::cout << "Pokemon capturé !"<< std::endl;
+				(*bag).pokeball--;
+				std::cout << (*bag).pokeball << std::endl;
+				sleep(3);
+				*meetOver=true;
+				break;
 			}
 			else if (captured == 0) {
+				(*bag).pokeball--;
+				std::cout << (*bag).pokeball << std::endl;
 				std::cout << "La capture du pokemon a échoué" << std::endl;
 			}
 			else if (spareplace==-1){

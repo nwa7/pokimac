@@ -1,6 +1,13 @@
-#ifndef COMBAT_H
-#define COMBAT_H
+#ifndef INVENTORY_H
+#define INVENTORY_H
 
-void displayInventory(Pokemon pokemon, Player player, int textOffset, int *chosenone);
+struct Bag
+{
+	int pokeball;
+	int potion;
+};
+typedef struct Bag Bag;
 
+void displayInventory(Pokemon pokemon, Player player, int textOffset, int *chosenone, Bag *bag, bool * meetOver);
+Bag initBag();
 #endif
