@@ -38,6 +38,7 @@ int main(){
 	//init map principale
 	char *map = (char *)malloc(sizeof(char) * MAP_WIDTH * MAP_HEIGHT);
 	initScreen(map, MAP_WIDTH, MAP_HEIGHT);
+	initGrass(map, MAP_WIDTH , MAP_HEIGHT/2);
 	displayScreen(map, MAP_WIDTH, MAP_HEIGHT, 0, 0 + textOffset);
 
 	//init screen interaction recontre pokemon
@@ -62,6 +63,7 @@ int main(){
 		int defIndex = rand() % 5;
 		int nameIndex = rand() % 9;
 		pokemonTab[i] = initPokemon((MAP_WIDTH - 2) - pokemonX, (MAP_HEIGHT - 2) - pokemonY, '&', 100, atkIndex, defIndex, nameIndex);
+		setSkinGrass(&pokemonTab[i], 'w', '&', MAP_HEIGHT/2);
 		displayCharacter(pokemonTab[i].curPos.x, pokemonTab[i].curPos.y + textOffset, pokemonTab[i].skin);
 	}
 
@@ -86,13 +88,16 @@ int main(){
 					pokemonCollidId = i;
 					break;
 				}else{
-
-					displayCharacter(pokemonTab[i].curPos.x, pokemonTab[i].curPos.y + textOffset, ' ');
+					
+					setSkinGrass(&pokemonTab[i], 'w', ' ', MAP_HEIGHT/2);
+					displayCharacter(pokemonTab[i].curPos.x, pokemonTab[i].curPos.y + textOffset, pokemonTab[i].skin);
 					pokemonMove(&pokemonTab[i], MAP_WIDTH, MAP_HEIGHT, textOffset);
-					displayCharacter(pokemonTab[i].curPos.x, pokemonTab[i].curPos.y + textOffset, '&');
+					setSkinGrass(&pokemonTab[i], 'w', '&', MAP_HEIGHT/2);
+					displayCharacter(pokemonTab[i].curPos.x, pokemonTab[i].curPos.y + textOffset, pokemonTab[i].skin);
 
 					if (!pokemonTab[i].active) continue;
-					if (player.curPos.x == pokemonTab[i].curPos.x && player.curPos.y == pokemonTab[i].curPos.y){
+					if (player.curPos.x == pokemonTab[i].curPos.x && player.curPos.y == pokemonTab[i].curPos.y)
+					{
 						pokemonCollidId = i;
 						break;
 					}
@@ -122,7 +127,7 @@ int main(){
 							
 							cleanMessageArea(MAP_WIDTH, INTERACTION_HEIGHT + 8);
 							cout << " Vous avez décidé de fuir...Trouillard !" << std::flush;
-							sleep(1);
+							sleep(2);
 							meetOver = true;
 						}
 						else if (meetPkmn == 1){
@@ -175,12 +180,13 @@ int main(){
 					}
 				}
 				displayMap(map, MAP_WIDTH, MAP_HEIGHT, textOffset);
+				ConsoleUtils::setColor(ConsoleUtils::Color::CYAN); 
 				displayCharacter(player.curPos.x, player.curPos.y + textOffset, player.skin);
-
+				ConsoleUtils::resetColors();
 				for (int i = 0; i < numberPokemon; i++)
 				{
 					if (pokemonTab[i].active) {
-					displayCharacter(pokemonTab[i].curPos.x, pokemonTab[i].curPos.y + textOffset, '&');
+					displayCharacter(pokemonTab[i].curPos.x, pokemonTab[i].curPos.y + textOffset, pokemonTab[i].skin);
 					}
 				}
 			}

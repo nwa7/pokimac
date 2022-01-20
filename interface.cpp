@@ -51,6 +51,14 @@ void initFightScreen(char *tab, int width, int height, Player player, Pokemon po
 
 }
 
+void initGrass(char *tab, int width, int height){
+for (int j = 1; j < height; j++){
+		for (int i = 1; i < width -1; i++){
+			tab[j * width + i] = 'w';
+	}
+}
+}
+
 void displayScreen(char *tab, int width, int height, int x, int y){
 	ConsoleUtils::setCursorPos(0, 2);
 	for (int j = 0; j < height; j++){
@@ -134,8 +142,16 @@ void displayPkStat(Pokemon playerPokemon, Pokemon enemyPokemon, int MAP_WIDTH){
 
 void cleanMessageArea(int width, int height){
 ConsoleUtils::setCursorPos(0, height);
-for(int i=0; i<width; i++){
+	for(int i=0; i<width; i++){
 	cout << " ";
-}
+	}
 ConsoleUtils::setCursorPos(0, height);
+}
+
+void setSkinGrass(Pokemon *pokemon, char skinGrass, char skinNormal, int grassHeight){
+	if(pokemon->curPos.y < grassHeight){
+		pokemon->skin = skinGrass;
+	} else{
+		pokemon->skin = skinNormal;
+	}
 }

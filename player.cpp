@@ -49,8 +49,12 @@ void playerMove(Player *player, int c, int MAP_HEIGHT, int MAP_WIDTH, int textOf
 	}
 
 	if (oldPos.x != player->curPos.x || oldPos.y != player->curPos.y){
-	
-		displayCharacter(oldPos.x, oldPos.y + textOffset, ' ');
+		if(oldPos.y < 10){ 
+			displayCharacter(oldPos.x, oldPos.y + textOffset, 'w');
+		} else {
+			displayCharacter(oldPos.x, oldPos.y + textOffset, ' ');
+		}
+		//displayCharacter(oldPos.x, oldPos.y + textOffset, ' ');
 		ConsoleUtils::setColor(ConsoleUtils::Color::CYAN); 
 		displayCharacter(player->curPos.x, player->curPos.y + textOffset, player->skin);	
 		ConsoleUtils::resetColors();			
