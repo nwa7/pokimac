@@ -153,7 +153,7 @@ int main(){
 							}
 						}
 						else if (meetPkmn == 0){
-							displayInventory(pokemonTab + pokemonCollidId, &player, textOffset, &chosenone, &bag, &meetOver );
+							displayInventory(pokemonTab + pokemonCollidId, &player, textOffset, &chosenone, &bag, &meetOver, &playerTour);
 						}  	                  // adresse du tableau à la position pkmncollidid
 						
 						else if (meetPkmn == 2){
