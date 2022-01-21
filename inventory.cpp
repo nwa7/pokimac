@@ -106,7 +106,20 @@ void displayInventory(Pokemon *pokemon, Player *player, int textOffset, int * ch
 		int inventoryChoice = Choice();
 		// Potion action
 		if(inventoryChoice==0) {
-			(*player).teamPokemon[*chosenone].hp += 20; 
+			if((*player).teamPokemon[*chosenone].hp >80){
+			(*player).teamPokemon[*chosenone].hp =100;
+			}else {
+			(*player).teamPokemon[*chosenone].hp += 20;
+			}
+			std::cout <<" Vous avez utilisé une potion sur " << (*player).teamPokemon[*chosenone].pkName << " !" << std::endl;
+			sleep(2);
+			*playerTour=false;
+			ConsoleUtils::clear();
+			displayScreen(interactionScreen, MAP_WIDTH, INTERACTION_HEIGHT, 0, 0);
+			displayActionChoice(MAP_WIDTH,INTERACTION_HEIGHT + textOffset);
+			displayPkStat((*player).teamPokemon[*chosenone], *pokemon, MAP_WIDTH);
+			break; 
+			
 		}
 		// Capture action
 		else if(inventoryChoice==1){
