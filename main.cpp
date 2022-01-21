@@ -132,7 +132,7 @@ int main(){
 						}
 						else if (meetPkmn == 1){
 
-							Attack(&player.teamPokemon[0], &pokemonTab[pokemonCollidId]);
+							Attack(&player.teamPokemon[chosenone], &pokemonTab[pokemonCollidId]);
 
 							cleanMessageArea(MAP_WIDTH, INTERACTION_HEIGHT + 8);
 							cout << "Vous attaquez " << pokemonTab[pokemonCollidId].pkName << " !";
@@ -141,7 +141,7 @@ int main(){
 
 								pokemonTab[pokemonCollidId].hp =0;
 
-								displayPkStat(player.teamPokemon[0], pokemonTab[pokemonCollidId], MAP_WIDTH);
+								displayPkStat(player.teamPokemon[chosenone], pokemonTab[pokemonCollidId], MAP_WIDTH);
 								cleanMessageArea(MAP_WIDTH, INTERACTION_HEIGHT + 8);
 								cout << "Félicitations ! Vous avez vaincu " << pokemonTab[pokemonCollidId].pkName << " !" << std::flush;
 
@@ -149,7 +149,7 @@ int main(){
 								sleep(2);
 								meetOver = true; 
 							}else { 
-								displayPkStat(player.teamPokemon[0], pokemonTab[pokemonCollidId], MAP_WIDTH);	playerTour = false;
+								displayPkStat(player.teamPokemon[chosenone], pokemonTab[pokemonCollidId], MAP_WIDTH);	playerTour = false;
 							}
 						}
 						else if (meetPkmn == 0){
@@ -157,7 +157,7 @@ int main(){
 						}  	                  // adresse du tableau à la position pkmncollidid
 						
 						else if (meetPkmn == 2){
-							displayteamPokemon(&player, textOffset, &chosenone);
+							displayteamPokemon(&player, &pokemonTab[pokemonCollidId], textOffset, &chosenone, &playerTour);
 						}
 					
 					}
@@ -165,16 +165,16 @@ int main(){
 
 						sleep(1);
 
-						Attack(&pokemonTab[pokemonCollidId], &player.teamPokemon[0]);
+						Attack(&pokemonTab[pokemonCollidId], &player.teamPokemon[chosenone]);
 						cleanMessageArea(MAP_WIDTH, INTERACTION_HEIGHT + 8);
 						cout << pokemonTab[pokemonCollidId].pkName << " vous attaque !";
 
-						if (player.teamPokemon[0].hp <= 0){
-							player.teamPokemon[0].hp = 0;
+						if (player.teamPokemon[chosenone].hp <= 0){
+							player.teamPokemon[chosenone].hp = 0;
 							meetOver = true;
 						}
 						else{								
-							displayPkStat(player.teamPokemon[0], pokemonTab[pokemonCollidId], MAP_WIDTH);
+							displayPkStat(player.teamPokemon[chosenone], pokemonTab[pokemonCollidId], MAP_WIDTH);
 							playerTour = true;
 						}
 					}

@@ -9,6 +9,6 @@ struct Bag
 typedef struct Bag Bag;
 
 void displayInventory(Pokemon *pokemon, Player *player, int textOffset, int * chosenone, Bag *bag, bool * meetOver, bool * playerTour);
-void displayteamPokemon(Player *player, int textOffset, int * chosenone);
+void displayteamPokemon(Player *player, Pokemon *pokemon, int textOffset, int * chosenone, bool * playerTour);
 Bag initBag();
 #endif
