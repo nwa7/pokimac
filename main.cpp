@@ -171,7 +171,11 @@ int main(){
 
 						if (player.teamPokemon[chosenone].hp <= 0){
 							player.teamPokemon[chosenone].hp = 0;
+							displayteamPokemon(&player, &pokemonTab[pokemonCollidId], textOffset, &chosenone, &playerTour);
+							if (player.teamPokemon[chosenone].hp <= 0){
+								player.teamPokemon[chosenone].hp = 0;
 							meetOver = true;
+							}
 						}
 						else{								
 							displayPkStat(player.teamPokemon[chosenone], pokemonTab[pokemonCollidId], MAP_WIDTH);
