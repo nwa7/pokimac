@@ -144,7 +144,33 @@ int main(){
 								displayPkStat(player.teamPokemon[chosenone], pokemonTab[pokemonCollidId], MAP_WIDTH);
 								cleanMessageArea(MAP_WIDTH, INTERACTION_HEIGHT + 8);
 								cout << "Félicitations ! Vous avez vaincu " << pokemonTab[pokemonCollidId].pkName << " !" << std::flush;
-
+								cout << endl; 
+								int pokeballwon = rand() % 20;
+								if (pokeballwon<5){
+									bag.pokeball++;
+								cout << "Vous obtenez 1 pokeball!" << endl;
+								}
+								else if(pokeballwon==6 || pokeballwon==7){	
+									bag.pokeball+=2;
+									cout << "Vous obtenez 2 pokeballs!" << endl;
+									}
+								else if(pokeballwon==8){	
+								bag.pokeball+=3;
+								cout << "Vous obtenez 3 pokeballs!" << endl;
+								}
+								int potionwon = rand() % 20;
+								if (potionwon<5){
+									bag.potion++;
+								cout << "Vous obtenez 1 potion!" << endl;
+								}
+								else if(potionwon==6 || potionwon==7){	
+									bag.potion+=2;
+									cout << "Vous obtenez 2 potions!" << endl;
+									}
+								else if(potionwon==8){	
+								bag.potion+=3;
+								cout << "Vous obtenez 3 potions!" << endl;
+								}
 								pokemonTab[pokemonCollidId].active = false;
 								sleep(2);
 								meetOver = true; 
