@@ -17,7 +17,7 @@ void initScreen(char *tab, int width, int height){
 		}
 	}
 }
-
+#if 0
 void initFightScreen(char *tab, int width, int height, Player player, Pokemon pokemon){
 	for (int j = 0; j < height; j++){
 		for (int i = 0; i < width; i++)
@@ -50,6 +50,8 @@ void initFightScreen(char *tab, int width, int height, Player player, Pokemon po
 	tab[3 * width - 2 ] = ']';
 
 }
+
+#endif //useless code
 
 void initGrass(char *tab, int width, int height){
 for (int j = 1; j < height; j++){

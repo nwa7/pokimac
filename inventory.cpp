@@ -109,7 +109,7 @@ void displayInventory(Pokemon *pokemon, Player *player, int textOffset, int * ch
 			if((*player).teamPokemon[*chosenone].hp >80){
 			(*player).teamPokemon[*chosenone].hp =100;
 			}else {
-			(*player).teamPokemon[*chosenone].hp += 20;
+			(*player).teamPokemon[*chosenone].hp += 40;
 			}
 			std::cout <<" Vous avez utilisé une potion sur " << (*player).teamPokemon[*chosenone].pkName << " !" << std::endl;
 			sleep(2);
@@ -135,6 +135,7 @@ void displayInventory(Pokemon *pokemon, Player *player, int textOffset, int * ch
 				sleep(2);
 				addpkmntoteam(*player, *pokemon, spareplace);
 				std::cout <<(*pokemon).pkName << " a été ajouté à votre team pokemon"<< std::endl;
+				(*pokemon).active=false;
 				sleep(2);
 				*meetOver=true;
 				break;

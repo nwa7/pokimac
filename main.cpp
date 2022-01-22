@@ -23,11 +23,29 @@ Bag bag = initBag();
 int meetPokemon(char *screen, int MAP_WIDTH, int MAP_HEIGHT, int textOffset, Player player, Pokemon pokemon);
 void Attack(Pokemon *fightingPokemon, Pokemon *enemyPokemon);
 
+
+void blabla(){
+	ConsoleUtils::clear();
+	ConsoleUtils::setCursorPos(8, 8);
+	std::cout << "> Hey! Tu es nouveau ici non? On peut connaître ton nom? "<<std::endl;
+	char playerName[32];
+	std::cout << "> ";
+	ConsoleUtils::setCursorPos(8, 10);
+	std::cout << "> ";
+	std::cin >> playerName;
+	ConsoleUtils::setCursorPos(8, 12);
+	std::cout << "> Super :) " << playerName << " c'est ça :) ? " << endl;
+	char rep[32];
+	ConsoleUtils::setCursorPos(8, 14);
+	std::cout << "> ";
+	std::cin >> rep;
+	if (rep[0]=='n'){	
+		blabla();
+	}
+}
+
 int main(){
 
-	ConsoleUtils::clear();
-	std::cout << "GOTTA CATCH THEM ALL!!" << std::endl;
-	std::cout << "Hit space to quit" << std::endl;
 	{
 
 	//génération nombre random pour déplacement pokemon
@@ -35,9 +53,34 @@ int main(){
 	int textOffset = 2; //décaler car on a 2 phrasesau début
 	int numberPokemon = rand() % 25 + 8;
 
-	//init map principale
+	// ecran d'accueil
 	char *map = (char *)malloc(sizeof(char) * MAP_WIDTH * MAP_HEIGHT);
 	initScreen(map, MAP_WIDTH, MAP_HEIGHT);
+	displayScreen(map, MAP_WIDTH, MAP_HEIGHT, 0, 0 + textOffset);
+	
+
+	blabla();
+
+	ConsoleUtils::clear();
+	ConsoleUtils::setCursorPos(8, 8);
+	std::cout << "> Parfait! Bienvenue dans notre monde rempli de pokemons! "<<std::endl;
+	sleep(0.5);
+	ConsoleUtils::setCursorPos(8, 10);
+	std::cout << "> Pour commencer il te faudra choisir ton premier pokemon"<<std::endl;
+	sleep(0.5);
+	ConsoleUtils::setCursorPos(8, 12);
+	std::cout << "> Tu as le choix entre ces 3 là :"<<std::endl;
+
+
+	std::cout << "Es-tu prêt à tous les capturer?! "<<std::endl;
+
+	sleep(3);
+
+	ConsoleUtils::clear();
+	std::cout << std::endl;
+	std::cout << std::endl;
+
+	//init map principale
 	initGrass(map, MAP_WIDTH , MAP_HEIGHT/2);
 	displayScreen(map, MAP_WIDTH, MAP_HEIGHT, 0, 0 + textOffset);
 
@@ -144,7 +187,7 @@ int main(){
 								displayPkStat(player.teamPokemon[chosenone], pokemonTab[pokemonCollidId], MAP_WIDTH);
 								cleanMessageArea(MAP_WIDTH, INTERACTION_HEIGHT + 8);
 								cout << "Félicitations ! Vous avez vaincu " << pokemonTab[pokemonCollidId].pkName << " !" << std::flush;
-								cout << endl; 
+								cout << endl;
 								int pokeballwon = rand() % 20;
 								if (pokeballwon<5){
 									bag.pokeball++;
