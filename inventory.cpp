@@ -29,27 +29,6 @@ void displayActionChoice2(int MAP_WIDTH){
 	}
 }
 
-int Choice(){
-	int arrowChoice = -1;
-	do{ 
-		bool special = false; 
-		arrowChoice = ConsoleUtils::getChar(&special);
-	} while(arrowChoice != ConsoleUtils::KEY_UP && arrowChoice != ConsoleUtils::KEY_DOWN && arrowChoice != ConsoleUtils::KEY_LEFT);
-	switch (arrowChoice){
-		case ConsoleUtils::KEY_UP:
-			return 0;
-
-		case ConsoleUtils::KEY_DOWN:
-			return 1;
-
-		case ConsoleUtils::KEY_LEFT:
-			return 2;
-
-		default:
-			return -1 ;
-	}
-}
-
 bool capture(Pokemon pokemon){
 	int luck= rand() % 100;
 	int weak=(100-pokemon.hp);
@@ -109,9 +88,10 @@ void displayInventory(Pokemon *pokemon, Player *player, int textOffset, int * ch
 			if((*player).teamPokemon[*chosenone].hp >80){
 			(*player).teamPokemon[*chosenone].hp =100;
 			}else {
-			(*player).teamPokemon[*chosenone].hp += 40;
+			(*player).teamPokemon[*chosenone].hp += 20;
 			}
 			std::cout <<" Vous avez utilisé une potion sur " << (*player).teamPokemon[*chosenone].pkName << " !" << std::endl;
+			std::cout << "Il te reste "<<(*bag).potion << "potions" << std::endl;
 			sleep(2);
 			*playerTour=false;
 			ConsoleUtils::clear();
@@ -131,7 +111,7 @@ void displayInventory(Pokemon *pokemon, Player *player, int textOffset, int * ch
 			if (captured == 1 && spareplace != -1 ){
 				std::cout << "Pokemon capturé !"<< std::endl;
 				(*bag).pokeball--;
-				std::cout << (*bag).pokeball << std::endl;
+				std::cout << "Il te reste "<<(*bag).pokeball << "pokeballs" << std::endl;
 				sleep(2);
 				addpkmntoteam(*player, *pokemon, spareplace);
 				std::cout <<(*pokemon).pkName << " a été ajouté à votre team pokemon"<< std::endl;
@@ -142,8 +122,8 @@ void displayInventory(Pokemon *pokemon, Player *player, int textOffset, int * ch
 			}
 			else if (captured == 0) {
 				(*bag).pokeball--;
-				std::cout << (*bag).pokeball << std::endl;
 				std::cout << "La capture du pokemon a échoué" << std::endl;
+				std::cout << "Il te reste "<<(*bag).pokeball << "pokeballs" << std::endl;
 				sleep(2);
 				*playerTour=false;
 				ConsoleUtils::clear();

@@ -13,4 +13,5 @@ void displayCharacter(int x, int y, char skin);
 void displayPkStat(Pokemon playerPokemon, Pokemon enemyPokemon, int MAP_WIDTH);
 void cleanMessageArea(int width, int height);
 void setSkinGrass(Pokemon *pokemon, char skinGrass, char skinNormal, int grassHeight);
+int Choice(void);
 #endif

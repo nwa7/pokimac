@@ -34,7 +34,7 @@ void blabla(){
 	std::cout << "> ";
 	std::cin >> playerName;
 	ConsoleUtils::setCursorPos(8, 12);
-	std::cout << "> Super :) " << playerName << " c'est ça :) ? " << endl;
+	std::cout << "> Super, " << playerName << " c'est ça :) ? " << endl;
 	char rep[32];
 	ConsoleUtils::setCursorPos(8, 14);
 	std::cout << "> ";
@@ -42,6 +42,28 @@ void blabla(){
 	if (rep[0]=='n'){	
 		blabla();
 	}
+}
+
+Pokemon selecStarter(){
+	Pokemon *starterTab = (Pokemon *)malloc(sizeof(Pokemon) * 3);
+	char arrow[3]={'<','^','>'};
+	for(int i = 0; i< 3; i++){ 
+		starterTab[i] = initPokemon(MAP_WIDTH / 2, MAP_HEIGHT / 2, '&', 100, rand() % 5, rand() % 5, rand() % 9);
+		ConsoleUtils::setCursorPos(8, 16+i);
+		std::cout << '[' << arrow[i] << ']';
+		std::cout << starterTab[i].pkName << " [" <<  starterTab[i].typeName <<"]"<< "  HP : " << (int) starterTab[i].hp << "  ATK : " << starterTab[i].atk << "  DEF : " << starterTab[i].def << std::endl  ; 
+	}
+	int starterchoice=Choice();
+	if (starterchoice==2){
+		return starterTab[0];
+	}
+	if (starterchoice==1){
+		return starterTab[1];
+	}
+	if (starterchoice==3){
+		return starterTab[2];
+	}
+	return starterTab[0];
 }
 
 int main(){
@@ -64,21 +86,34 @@ int main(){
 	ConsoleUtils::clear();
 	ConsoleUtils::setCursorPos(8, 8);
 	std::cout << "> Parfait! Bienvenue dans notre monde rempli de pokemons! "<<std::endl;
-	sleep(0.5);
+	sleep(1);
 	ConsoleUtils::setCursorPos(8, 10);
 	std::cout << "> Pour commencer il te faudra choisir ton premier pokemon"<<std::endl;
-	sleep(0.5);
+	sleep(1);
 	ConsoleUtils::setCursorPos(8, 12);
 	std::cout << "> Tu as le choix entre ces 3 là :"<<std::endl;
-
-
-	std::cout << "Es-tu prêt à tous les capturer?! "<<std::endl;
-
-	sleep(3);
+	
+	Pokemon starterPokemon = selecStarter();
+	
+	ConsoleUtils::setCursorPos(8, 20);
+	std::cout << "> "<< starterPokemon.pkName << " fait desormais partie de ton équipe !" << std::endl;	
+	sleep(1);
+	ConsoleUtils::setCursorPos(8, 22);
+	std::cout << "> Maintenant que tu as ton starter va, et affronte le plus de pokemon! "<<std::endl;
+	sleep(1);
+	ConsoleUtils::setCursorPos(8, 24);
+	std::cout << "> Si jamais tu veux sortir du jeu, presse la barre espace"<<std::endl;
+	sleep(1);
+	ConsoleUtils::setCursorPos(8, 26);
+	std::cout << "> CATCH THEM ALL !"<<std::endl;
+	
+	bool special = false; 
+	do{ 
+		ConsoleUtils::getChar(&special);
+	} while(!special);
+	
 
 	ConsoleUtils::clear();
-	std::cout << std::endl;
-	std::cout << std::endl;
 
 	//init map principale
 	initGrass(map, MAP_WIDTH , MAP_HEIGHT/2);
@@ -89,7 +124,7 @@ int main(){
 	initScreen(interactionScreen, MAP_WIDTH, INTERACTION_HEIGHT);
 
 	//player
-	Pokemon starterPokemon = initPokemon(MAP_WIDTH / 2, MAP_HEIGHT / 2, '&', 100, rand() % 5, rand() % 5, rand() % 9);
+
 	Player player;
 	player = initPlayer(MAP_WIDTH / 2, MAP_HEIGHT / 2, '@', starterPokemon);
 	ConsoleUtils::setColor(ConsoleUtils::Color::CYAN);

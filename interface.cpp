@@ -162,3 +162,28 @@ void setSkinGrass(Pokemon *pokemon, char skinGrass, char skinNormal, int grassHe
 		pokemon->skin = skinNormal;
 	}
 }
+
+
+int Choice(void){
+	int arrowChoice = -1;
+	do{ 
+		bool special = false; 
+		arrowChoice = ConsoleUtils::getChar(&special);
+	} while(arrowChoice != ConsoleUtils::KEY_UP && arrowChoice != ConsoleUtils::KEY_DOWN && arrowChoice != ConsoleUtils::KEY_LEFT && arrowChoice != ConsoleUtils::KEY_RIGHT);
+	switch (arrowChoice){
+		case ConsoleUtils::KEY_UP:
+			return 0;
+
+		case ConsoleUtils::KEY_DOWN:
+			return 1;
+
+		case ConsoleUtils::KEY_LEFT:
+			return 2;
+
+		case ConsoleUtils::KEY_RIGHT:
+			return 3;
+
+		default:
+			return -1 ;
+	}
+}
