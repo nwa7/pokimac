@@ -1,18 +1,14 @@
 #include <iostream>
 #include <random>
+#include <time.h>
 
 #include "consoleUtils.hpp"
 #include "interface.h"
 #include "player.h"
 #include "pokemon.h"
 #include "inventory.h"
-#include <time.h>
+#include "surrounding.h"
 
-
-using std::cin;
-using std::cout; 
-using std::endl;
-using std::flush;
 
 const int MAP_WIDTH = 80;
 const int MAP_HEIGHT = 20;
@@ -22,63 +18,6 @@ Bag bag = initBag();
 
 int meetPokemon(char *screen, int MAP_WIDTH, int MAP_HEIGHT, int textOffset, Player player, Pokemon pokemon);
 void Attack(Pokemon *fightingPokemon, Pokemon *enemyPokemon);
-
-
-char * blabla(){
-	ConsoleUtils::clear();
-	ConsoleUtils::setCursorPos(8, 6);
-	std::cout << "> Hey! vous êtes nouveau par ici! On peut connaître votre nom? "<<std::endl;
-	char *playerName = (char *)calloc(1, 32);
-	ConsoleUtils::setCursorPos(8, 8);
-	std::cout << "> ";
-	std::cin >> playerName;
-	ConsoleUtils::setCursorPos(8, 10);
-	std::cout << "> Super, " << playerName << " c'est ça :) ? " << std::endl;
-	char rep[32];
-	ConsoleUtils::setCursorPos(8, 12);
-	std::cout << "> ";
-	std::cin >> rep;
-	if (rep[0]=='n'){	
-		blabla();
-	}
-	return playerName;
-}
-
-void blablafin(char * playerName){
-	ConsoleUtils::clear();
-	ConsoleUtils::setCursorPos(8, 6);
-	std::cout << "> Bravo " << playerName << "! Vous avez constitué une fine équipe !! "<<std::endl;
-	ConsoleUtils::setCursorPos(8, 8);
-	std::cout << "> Au plaisir de vous revoir par ici :) "<<std::endl;
-	ConsoleUtils::setCursorPos(25, 10);
-	std::cout << "Laurence & Elia" << std::endl;
-	bool special = false; 
-	do{ 
-		ConsoleUtils::getChar(&special);
-	} while(!special);
-}
-
-Pokemon selecStarter(){
-	Pokemon *starterTab = (Pokemon *)malloc(sizeof(Pokemon) * 3);
-	char arrow[3]={'<','^','>'};
-	for(int i = 0; i< 3; i++){ 
-		starterTab[i] = initPokemon(MAP_WIDTH / 2, MAP_HEIGHT / 2, '&', 100, rand() % 5, rand() % 5, rand() % 9);
-		ConsoleUtils::setCursorPos(8, 14+i);
-		std::cout << '[' << arrow[i] << ']';
-		std::cout << starterTab[i].pkName << " [" <<  starterTab[i].typeName <<"]"<< "  HP : " << (int) starterTab[i].hp << "  ATK : " << starterTab[i].atk << "  DEF : " << starterTab[i].def << std::endl  ; 
-	}
-	int starterchoice=Choice();
-	if (starterchoice==2){
-		return starterTab[0];
-	}
-	if (starterchoice==0){
-		return starterTab[1];
-	}
-	if (starterchoice==3){
-		return starterTab[2];
-	}
-	return starterTab[0];
-}
 
 int main(){
 
@@ -161,6 +100,7 @@ int main(){
 	}
 
 	bool gameNotOver = false;
+	bool gagne = false;
 
 	while (!gameNotOver){
 
@@ -213,7 +153,7 @@ int main(){
 				{
 					if (playerTour){
 
-						meetPkmn = meetPokemon(map, MAP_WIDTH, MAP_HEIGHT, textOffset, player, pokemonTab[pokemonCollidId]);
+						meetPkmn = Choice();
 
 						//fuite
 						if (meetPkmn == 3){
@@ -303,6 +243,7 @@ int main(){
 					}
 				}
 				if (player.teamPokemon[5].atk != 0){
+					gagne=true;
 					gameNotOver = true;
 				}
 				displayMap(map, MAP_WIDTH, MAP_HEIGHT, textOffset);
@@ -322,38 +263,18 @@ int main(){
 				gameNotOver = true;
 			}
 		}
-	blablafin(playerName);
-
+	if (gagne){
+		blablafin(playerName);
+	}
+	// On libère tout le monde
 	free(playerName);
 	free(map);
+	free(pokemonTab);
+	free(player.teamPokemon);
+
 	ConsoleUtils::clear();
 }
 
-int meetPokemon(char *screen, int MAP_WIDTH, int MAP_HEIGHT, int textOffset, Player player, Pokemon pokemon)
-{
-	int arrowChoice;
-	do
-	{
-		bool special = false;
-		arrowChoice = ConsoleUtils::getChar(&special);
-	} while (arrowChoice != ConsoleUtils::KEY_UP && arrowChoice != ConsoleUtils::KEY_DOWN && arrowChoice != ConsoleUtils::KEY_LEFT && arrowChoice != ConsoleUtils::KEY_RIGHT);
-	switch (arrowChoice)
-	{
-	case ConsoleUtils::KEY_UP:
-		return 0;
-		break;
-	case ConsoleUtils::KEY_DOWN:
-		return 1;
-		break;
-	case ConsoleUtils::KEY_LEFT:
-		return 2;
-		break;
-	case ConsoleUtils::KEY_RIGHT:
-		return 3;
-	default:
-		return 3;
-	}
-}
 
 void Attack(Pokemon *fightingPokemon, Pokemon *enemyPokemon){
 	enemyPokemon->hp -= (fightingPokemon->atk * fightingPokemon->degatCoef) - (enemyPokemon->def/100 * (fightingPokemon->atk * fightingPokemon->degatCoef));

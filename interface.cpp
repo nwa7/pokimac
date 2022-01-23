@@ -1,11 +1,10 @@
 #include <iostream>
 #include <string.h>
+
 #include "consoleUtils.hpp"
 #include "interface.h"
 #include "player.h"
 #include "pokemon.h"
-using std::cout;
-using std::endl;
 
 
 void initScreen(char *tab, int width, int height){
@@ -36,7 +35,6 @@ void displayScreen(char *tab, int width, int height, int x, int y){
 	}
 }
 
-
 void displayMap(char *map, int MAP_WIDTH, int MAP_HEIGHT, int textOffset){
 	ConsoleUtils::clear();
 	displayScreen(map, MAP_WIDTH, MAP_HEIGHT, 0, 0+textOffset);
@@ -49,7 +47,7 @@ void displayCharacter(int x, int y, char skin){
 
 void displayActionChoice(int MAP_WIDTH, int y){
 	ConsoleUtils::setCursorPos(0, y);
-	std::cout << std::endl << "What will you do?" << std::endl;
+	std::cout << std::endl << "Qu'allez-vous faire?" << std::endl;
 	std::cout << std::endl << "<- POKEMON" <<"             "<<"ATTAQUE v" << "             "<<"INVENTAIRE ^"<<"             "<<"FUITE ->" << std::endl;
 	for (int i = 0; i < MAP_WIDTH; i++){
 		std::cout << "-";

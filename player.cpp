@@ -3,15 +3,6 @@
 #include "interface.h"
 #include "pokemon.h"
 
-/*Player initPlayer(int x, int y, char skin, int hp){
-	Player player;
-	player.curPos.x = x;
-	player.curPos.y = y;
-	player.skin = skin;
-	player.hp = hp;
-	return player;
-}*/
-
 Player initPlayer(int x, int y, char skin, Pokemon starterPokemon){
 	Player player;
 	player.curPos.x = x;
