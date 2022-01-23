@@ -22,8 +22,8 @@ Bag initBag(){
 
 void displayActionChoice2(int MAP_WIDTH){
 
-	std::cout << std::endl << "What will you do?" << std::endl;
-	std::cout << std::endl << "<- BACK" <<"              "<<"POKEBALL v" << "               "<<"POTION ^"<<"              "<<"      " << std::endl;
+	std::cout << std::endl << "Que va-tu faire?" << std::endl;
+	std::cout << std::endl << "<- RETOUR" <<"              "<<"POKEBALL v" << "               "<<"POTION ^"<<"              "<<"      " << std::endl;
 	for (int i = 0; i < MAP_WIDTH; i++){
 		std::cout << "-";
 	}
@@ -32,7 +32,7 @@ void displayActionChoice2(int MAP_WIDTH){
 bool capture(Pokemon pokemon){
 	int luck= rand() % 100;
 	int weak=(100-pokemon.hp);
-	if(luck + weak < 50 ){
+	if(luck + weak < 80 ){
 		return 0;
 	}
 	else{
@@ -72,12 +72,9 @@ void displayInventory(Pokemon *pokemon, Player *player, int textOffset, int * ch
 	initScreen(interactionScreen, MAP_WIDTH, INTERACTION_HEIGHT); 
 	displayScreen(interactionScreen, MAP_WIDTH, INTERACTION_HEIGHT, 0, 0+textOffset); 
 	displayActionChoice2(MAP_WIDTH);
-	/*std::cout << std::endl;		
-	std::cout << (*player).teamPokemon[0].pkName << "  " << (*player).teamPokemon[0].hp << "  " << (*player).teamPokemon[0].atk << (*player).teamPokemon[0].def << "  " << (*player).teamPokemon[0].typeName << "  " << (*player).teamPokemon[0].pkName << "  " << (*player).teamPokemon[0].degatCoef << "   " << (*player).teamPokemon[0].typeNumber << std::endl;
-	std::cout << std::endl;	
-	std::cout <<(*pokemon).pkName << "  " << (*pokemon).hp << "  " << (*pokemon).atk << (*pokemon).def << "  " << (*pokemon).typeName << "  " << (*pokemon).pkName << "  " << (*pokemon).degatCoef << "   " << (*pokemon).typeNumber << std::endl;*/
 	displayPkStat((*player).teamPokemon[*chosenone], *pokemon, MAP_WIDTH);
-	ConsoleUtils::setCursorPos(0, 17); // nb magique, que faire?
+	ConsoleUtils::setCursorPos(0, 17); 
+
 	// Inventory menu loop	
 	for(;;)
 	{
@@ -85,14 +82,25 @@ void displayInventory(Pokemon *pokemon, Player *player, int textOffset, int * ch
 		int inventoryChoice = Choice();
 		// Potion action
 		if(inventoryChoice==0) {
-			if((*player).teamPokemon[*chosenone].hp >80){
-			(*player).teamPokemon[*chosenone].hp =100;
-			}else {
-			(*player).teamPokemon[*chosenone].hp += 20;
+			if ((*bag).potion > 0){
+				if((*player).teamPokemon[*chosenone].hp >70){
+					(*player).teamPokemon[*chosenone].hp =100;
+					(*bag).potion--;
+				}
+				else {
+					(*player).teamPokemon[*chosenone].hp += 30;
+					(*bag).potion--;
+				}
+			
+				std::cout <<" Vous avez utilisé une potion sur " << (*player).teamPokemon[*chosenone].pkName << " !" << std::endl;
+				std::cout << " Il vous reste "<<(*bag).potion << " potions" << std::endl;
+				sleep(2);
 			}
-			std::cout <<" Vous avez utilisé une potion sur " << (*player).teamPokemon[*chosenone].pkName << " !" << std::endl;
-			std::cout << "Il te reste "<<(*bag).potion << "potions" << std::endl;
+
+		else {
+			std::cout << " Il ne vous reste plus de potion" << std::endl;
 			sleep(2);
+		}
 			*playerTour=false;
 			ConsoleUtils::clear();
 			displayScreen(interactionScreen, MAP_WIDTH, INTERACTION_HEIGHT, 0, 0);
@@ -107,33 +115,38 @@ void displayInventory(Pokemon *pokemon, Player *player, int textOffset, int * ch
 			bool captured = capture(*pokemon);
 			// Check if a stash is available for a new pokemon (return index in team pokemon)
 			int spareplace = sparePlace(*player);
-
-			if (captured == 1 && spareplace != -1 ){
-				std::cout << "Pokemon capturé !"<< std::endl;
-				(*bag).pokeball--;
-				std::cout << "Il te reste "<<(*bag).pokeball << "pokeballs" << std::endl;
+			if ((*bag).pokeball <= 0){
+				std::cout << " Il ne vous reste plus de pokeball" << std::endl;
 				sleep(2);
-				addpkmntoteam(*player, *pokemon, spareplace);
-				std::cout <<(*pokemon).pkName << " a été ajouté à votre team pokemon"<< std::endl;
-				(*pokemon).active=false;
-				sleep(2);
-				*meetOver=true;
-				break;
 			}
-			else if (captured == 0) {
-				(*bag).pokeball--;
-				std::cout << "La capture du pokemon a échoué" << std::endl;
-				std::cout << "Il te reste "<<(*bag).pokeball << "pokeballs" << std::endl;
-				sleep(2);
-				*playerTour=false;
-				ConsoleUtils::clear();
-				displayScreen(interactionScreen, MAP_WIDTH, INTERACTION_HEIGHT, 0, 0);
-				displayActionChoice(MAP_WIDTH,INTERACTION_HEIGHT + textOffset);
-				displayPkStat((*player).teamPokemon[*chosenone], *pokemon, MAP_WIDTH);
-				break;
-			}
-			else if (spareplace==-1){
-				std::cout << "Team pokemon pleine" << std::endl;
+			else{
+				if (captured == 1 && spareplace != -1 ){
+					std::cout << " Pokemon capturé !"<< std::endl;
+					(*bag).pokeball--;
+					std::cout << " Il vous reste "<<(*bag).pokeball << " pokeballs" << std::endl;
+					sleep(2);
+					addpkmntoteam(*player, *pokemon, spareplace);
+					std::cout <<(*pokemon).pkName << " a été ajouté à votre team pokemon"<< std::endl;
+					(*pokemon).active=false;
+					sleep(2);
+					*meetOver=true;
+					break;
+				}
+				else if (captured == 0) {
+					(*bag).pokeball--;
+					std::cout << " La capture du pokemon a échoué" << std::endl;
+					std::cout << " Il te reste "<<(*bag).pokeball << " pokeballs" << std::endl;
+					sleep(2);
+					*playerTour=false;
+					ConsoleUtils::clear();
+					displayScreen(interactionScreen, MAP_WIDTH, INTERACTION_HEIGHT, 0, 0);
+					displayActionChoice(MAP_WIDTH,INTERACTION_HEIGHT + textOffset);
+					displayPkStat((*player).teamPokemon[*chosenone], *pokemon, MAP_WIDTH);
+					break;
+				}
+				else if (spareplace==-1){
+					std::cout << " Team pokemon pleine" << std::endl; // Implémentée pour une version du jeu avec un but différent
+				}
 			}
 		}
 		// Leave inventory -> to fight menu
@@ -143,11 +156,6 @@ void displayInventory(Pokemon *pokemon, Player *player, int textOffset, int * ch
 			ConsoleUtils::clear();
 			displayScreen(interactionScreen, MAP_WIDTH, INTERACTION_HEIGHT, 0, 0);
 			displayActionChoice(MAP_WIDTH,INTERACTION_HEIGHT + textOffset);
-			
-			/*std::cout << std::endl;		
-			std::cout << (*player).teamPokemon[0].pkName << "  " << (*player).teamPokemon[0].hp << "  " << (*player).teamPokemon[0].atk << (*player).teamPokemon[0].def << "  " << (*player).teamPokemon[0].typeName << "  " << (*player).teamPokemon[0].pkName << "  " << (*player).teamPokemon[0].degatCoef << "   " << (*player).teamPokemon[0].typeNumber << std::endl;
-			std::cout << std::endl;	
-			std::cout <<(*pokemon).pkName << "  " << (*pokemon).hp << "  " << (*pokemon).atk << (*pokemon).def << "  " << (*pokemon).typeName << "  " << (*pokemon).pkName << "  " << (*pokemon).degatCoef << "   " << (*pokemon).typeNumber << std::endl;*/
 			displayPkStat((*player).teamPokemon[*chosenone], *pokemon, MAP_WIDTH);
 			break;
 		}
@@ -156,8 +164,8 @@ void displayInventory(Pokemon *pokemon, Player *player, int textOffset, int * ch
 
 void displayActionChoice3(int MAP_WIDTH){
 	ConsoleUtils::setCursorPos(0, 12);
-	std::cout << std::endl << "What will you do?" << std::endl;
-	std::cout << std::endl << "<- BACK" <<"              "<<"CHOOSE v" << "               "<<"SEND ^"<<"              "<<"      " << std::endl;
+	std::cout << std::endl << "Qu'allez-vous faire?" << std::endl;
+	std::cout << std::endl << "<- RETOUR" <<"              "<<"PARCOURIR v" << "               "<<"CHOISIR ^"<<"              "<<"      " << std::endl;
 	for (int i = 0; i < MAP_WIDTH; i++){
 		std::cout << "-";
 	}
@@ -189,10 +197,10 @@ void displayteamPokemon(Player *player, Pokemon *pokemon, int textOffset, int * 
 		if(i ==0){ 
 			ConsoleUtils::setCursorPos(0, 18);
 			ConsoleUtils::setBackgroundColor(ConsoleUtils::BackgroundColor::BG_BLUE);
-			std::cout << player->teamPokemon[i].pkName << " [" <<  player->teamPokemon[i].typeName <<"]"<< "  HP : " << (int) player->teamPokemon[i].hp << "  ATK : " << player->teamPokemon[i].atk << "  DEF : " << player->teamPokemon[i].def  ; 
+			std::cout << player->teamPokemon[i].pkName << " [" <<  player->teamPokemon[i].typeName <<"]"<< "  PV : " << (int) player->teamPokemon[i].hp << "  ATK : " << player->teamPokemon[i].atk << "  DEF : " << player->teamPokemon[i].def  ; 
 			ConsoleUtils::resetColors();
 		}else {
-		std::cout << player->teamPokemon[i].pkName << " [" <<  player->teamPokemon[i].typeName <<"]"<< "  HP : " << (int) player->teamPokemon[i].hp << "  ATK : " << player->teamPokemon[i].atk << "  DEF : " << player->teamPokemon[i].def  ; 
+		std::cout << player->teamPokemon[i].pkName << " [" <<  player->teamPokemon[i].typeName <<"]"<< "  PV : " << (int) player->teamPokemon[i].hp << "  ATK : " << player->teamPokemon[i].atk << "  DEF : " << player->teamPokemon[i].def  ; 
 		}
 	}
 

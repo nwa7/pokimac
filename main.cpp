@@ -24,24 +24,38 @@ int meetPokemon(char *screen, int MAP_WIDTH, int MAP_HEIGHT, int textOffset, Pla
 void Attack(Pokemon *fightingPokemon, Pokemon *enemyPokemon);
 
 
-void blabla(){
+char * blabla(){
 	ConsoleUtils::clear();
+	ConsoleUtils::setCursorPos(8, 6);
+	std::cout << "> Hey! vous êtes nouveau par ici! On peut connaître votre nom? "<<std::endl;
+	char *playerName = (char *)calloc(1, 32);
 	ConsoleUtils::setCursorPos(8, 8);
-	std::cout << "> Hey! Tu es nouveau ici non? On peut connaître ton nom? "<<std::endl;
-	char playerName[32];
-	std::cout << "> ";
-	ConsoleUtils::setCursorPos(8, 10);
 	std::cout << "> ";
 	std::cin >> playerName;
-	ConsoleUtils::setCursorPos(8, 12);
-	std::cout << "> Super, " << playerName << " c'est ça :) ? " << endl;
+	ConsoleUtils::setCursorPos(8, 10);
+	std::cout << "> Super, " << playerName << " c'est ça :) ? " << std::endl;
 	char rep[32];
-	ConsoleUtils::setCursorPos(8, 14);
+	ConsoleUtils::setCursorPos(8, 12);
 	std::cout << "> ";
 	std::cin >> rep;
 	if (rep[0]=='n'){	
 		blabla();
 	}
+	return playerName;
+}
+
+void blablafin(char * playerName){
+	ConsoleUtils::clear();
+	ConsoleUtils::setCursorPos(8, 6);
+	std::cout << "> Bravo " << playerName << "! Vous avez constitué une fine équipe !! "<<std::endl;
+	ConsoleUtils::setCursorPos(8, 8);
+	std::cout << "> Au plaisir de vous revoir par ici :) "<<std::endl;
+	ConsoleUtils::setCursorPos(25, 10);
+	std::cout << "Laurence & Elia" << std::endl;
+	bool special = false; 
+	do{ 
+		ConsoleUtils::getChar(&special);
+	} while(!special);
 }
 
 Pokemon selecStarter(){
@@ -49,7 +63,7 @@ Pokemon selecStarter(){
 	char arrow[3]={'<','^','>'};
 	for(int i = 0; i< 3; i++){ 
 		starterTab[i] = initPokemon(MAP_WIDTH / 2, MAP_HEIGHT / 2, '&', 100, rand() % 5, rand() % 5, rand() % 9);
-		ConsoleUtils::setCursorPos(8, 16+i);
+		ConsoleUtils::setCursorPos(8, 14+i);
 		std::cout << '[' << arrow[i] << ']';
 		std::cout << starterTab[i].pkName << " [" <<  starterTab[i].typeName <<"]"<< "  HP : " << (int) starterTab[i].hp << "  ATK : " << starterTab[i].atk << "  DEF : " << starterTab[i].def << std::endl  ; 
 	}
@@ -57,7 +71,7 @@ Pokemon selecStarter(){
 	if (starterchoice==2){
 		return starterTab[0];
 	}
-	if (starterchoice==1){
+	if (starterchoice==0){
 		return starterTab[1];
 	}
 	if (starterchoice==3){
@@ -67,8 +81,6 @@ Pokemon selecStarter(){
 }
 
 int main(){
-
-	{
 
 	//génération nombre random pour déplacement pokemon
 	std::srand(std::time(nullptr));
@@ -81,31 +93,34 @@ int main(){
 	displayScreen(map, MAP_WIDTH, MAP_HEIGHT, 0, 0 + textOffset);
 	
 
-	blabla();
+	char *playerName = blabla();
 
 	ConsoleUtils::clear();
-	ConsoleUtils::setCursorPos(8, 8);
+	ConsoleUtils::setCursorPos(8, 6);
 	std::cout << "> Parfait! Bienvenue dans notre monde rempli de pokemons! "<<std::endl;
 	sleep(1);
-	ConsoleUtils::setCursorPos(8, 10);
-	std::cout << "> Pour commencer il te faudra choisir ton premier pokemon"<<std::endl;
+	ConsoleUtils::setCursorPos(8, 8);
+	std::cout << "> Pour commencer il faut choisir votre premier pokemon"<<std::endl;
 	sleep(1);
-	ConsoleUtils::setCursorPos(8, 12);
-	std::cout << "> Tu as le choix entre ces 3 là :"<<std::endl;
+	ConsoleUtils::setCursorPos(8, 10);
+	std::cout << "> Voici les choix possibles :"<<std::endl;
 	
 	Pokemon starterPokemon = selecStarter();
 	
+	ConsoleUtils::setCursorPos(8, 18);
+	std::cout << "> "<< starterPokemon.pkName << " fait desormais partie de votre équipe !" << std::endl;	
+	sleep(1);
 	ConsoleUtils::setCursorPos(8, 20);
-	std::cout << "> "<< starterPokemon.pkName << " fait desormais partie de ton équipe !" << std::endl;	
+	std::cout << "> Le but est de construire une team de 6 pokemons"<<std::endl;
 	sleep(1);
 	ConsoleUtils::setCursorPos(8, 22);
-	std::cout << "> Maintenant que tu as ton starter va, et affronte le plus de pokemon! "<<std::endl;
+	std::cout << "> Pour jouer, utilisez les flèches du clavier"<<std::endl;
 	sleep(1);
 	ConsoleUtils::setCursorPos(8, 24);
-	std::cout << "> Si jamais tu veux sortir du jeu, presse la barre espace"<<std::endl;
+	std::cout << "> Pour sortir du jeu il suffit de presser la barre espace"<<std::endl;
 	sleep(1);
 	ConsoleUtils::setCursorPos(8, 26);
-	std::cout << "> CATCH THEM ALL !"<<std::endl;
+	std::cout << "> ATTRAPEZ-LES TOUS !"<<std::endl;
 	
 	bool special = false; 
 	do{ 
@@ -139,7 +154,7 @@ int main(){
 		int pokemonY = rand() % 15;
 		int atkIndex = rand() % 5;
 		int defIndex = rand() % 5;
-		int nameIndex = rand() % 9;
+		int nameIndex = rand() % 10;
 		pokemonTab[i] = initPokemon((MAP_WIDTH - 2) - pokemonX, (MAP_HEIGHT - 2) - pokemonY, '&', 100, atkIndex, defIndex, nameIndex);
 		setSkinGrass(&pokemonTab[i], 'w', '&', MAP_HEIGHT/2);
 		displayCharacter(pokemonTab[i].curPos.x, pokemonTab[i].curPos.y + textOffset, pokemonTab[i].skin);
@@ -204,7 +219,7 @@ int main(){
 						if (meetPkmn == 3){
 							
 							cleanMessageArea(MAP_WIDTH, INTERACTION_HEIGHT + 8);
-							cout << " Vous avez décidé de fuir...Trouillard !" << std::flush;
+							std::cout << " Vous avez décidé de fuir...Trouillard !" << std::flush;
 							sleep(2);
 							meetOver = true;
 						}
@@ -213,7 +228,7 @@ int main(){
 							Attack(&player.teamPokemon[chosenone], &pokemonTab[pokemonCollidId]);
 
 							cleanMessageArea(MAP_WIDTH, INTERACTION_HEIGHT + 8);
-							cout << "Vous attaquez " << pokemonTab[pokemonCollidId].pkName << " !";
+							std::cout << "Vous attaquez " << pokemonTab[pokemonCollidId].pkName << " !";
 
 							if(pokemonTab[pokemonCollidId].hp <= 0){
 
@@ -221,33 +236,33 @@ int main(){
 
 								displayPkStat(player.teamPokemon[chosenone], pokemonTab[pokemonCollidId], MAP_WIDTH);
 								cleanMessageArea(MAP_WIDTH, INTERACTION_HEIGHT + 8);
-								cout << "Félicitations ! Vous avez vaincu " << pokemonTab[pokemonCollidId].pkName << " !" << std::flush;
-								cout << endl;
+								std::cout << "Félicitations ! Vous avez vaincu " << pokemonTab[pokemonCollidId].pkName << " !" << std::flush;
+								std::cout << std::endl;
 								int pokeballwon = rand() % 20;
 								if (pokeballwon<5){
 									bag.pokeball++;
-								cout << "Vous obtenez 1 pokeball!" << endl;
+								std::cout << "Vous obtenez 1 pokeball!" << std::endl;
 								}
 								else if(pokeballwon==6 || pokeballwon==7){	
 									bag.pokeball+=2;
-									cout << "Vous obtenez 2 pokeballs!" << endl;
+									std::cout << "Vous obtenez 2 pokeballs!" << std::endl;
 									}
 								else if(pokeballwon==8){	
 								bag.pokeball+=3;
-								cout << "Vous obtenez 3 pokeballs!" << endl;
+								std::cout << "Vous obtenez 3 pokeballs!" << std::endl;
 								}
 								int potionwon = rand() % 20;
 								if (potionwon<5){
 									bag.potion++;
-								cout << "Vous obtenez 1 potion!" << endl;
+								std::cout << "Vous obtenez 1 potion!" << std::endl;
 								}
 								else if(potionwon==6 || potionwon==7){	
 									bag.potion+=2;
-									cout << "Vous obtenez 2 potions!" << endl;
+									std::cout << "Vous obtenez 2 potions!" << std::endl;
 									}
 								else if(potionwon==8){	
 								bag.potion+=3;
-								cout << "Vous obtenez 3 potions!" << endl;
+								std::cout << "Vous obtenez 3 potions!" << std::endl;
 								}
 								pokemonTab[pokemonCollidId].active = false;
 								sleep(2);
@@ -271,7 +286,7 @@ int main(){
 
 						Attack(&pokemonTab[pokemonCollidId], &player.teamPokemon[chosenone]);
 						cleanMessageArea(MAP_WIDTH, INTERACTION_HEIGHT + 8);
-						cout << pokemonTab[pokemonCollidId].pkName << " vous attaque !";
+						std::cout << pokemonTab[pokemonCollidId].pkName << " vous attaque !";
 
 						if (player.teamPokemon[chosenone].hp <= 0){
 							player.teamPokemon[chosenone].hp = 0;
@@ -286,6 +301,9 @@ int main(){
 							playerTour = true;
 						}
 					}
+				}
+				if (player.teamPokemon[5].atk != 0){
+					gameNotOver = true;
 				}
 				displayMap(map, MAP_WIDTH, MAP_HEIGHT, textOffset);
 				ConsoleUtils::setColor(ConsoleUtils::Color::CYAN); 
@@ -304,9 +322,10 @@ int main(){
 				gameNotOver = true;
 			}
 		}
+	blablafin(playerName);
 
-		free(map);
-	}
+	free(playerName);
+	free(map);
 	ConsoleUtils::clear();
 }
 
