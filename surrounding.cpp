@@ -7,6 +7,7 @@ const int MAP_WIDTH = 80;
 const int MAP_HEIGHT = 20;
 const int INTERACTION_HEIGHT = 10;
 
+//choix nom player
 char * blabla(){
 	ConsoleUtils::clear();
 	ConsoleUtils::setCursorPos(8, 6);
@@ -27,6 +28,7 @@ char * blabla(){
 	return playerName;
 }
 
+//message de game over 
 void blablafin(char * playerName){
 	ConsoleUtils::clear();
 	ConsoleUtils::setCursorPos(8, 6);
@@ -41,6 +43,7 @@ void blablafin(char * playerName){
 	} while(!special);
 }
 
+//selection pokemon starter
 Pokemon selecStarter(){
 	Pokemon *starterTab = (Pokemon *)malloc(sizeof(Pokemon) * 3);
 	char arrow[3]={'<','^','>'};

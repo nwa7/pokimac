@@ -23,7 +23,7 @@ int main(){
 
 	//génération nombre random pour déplacement pokemon
 	std::srand(std::time(nullptr));
-	int textOffset = 2; //décaler car on a 2 phrasesau début
+	int textOffset = 2; //décaler car on a 2 phrases au début
 	int numberPokemon = rand() % 25 + 8;
 
 	// ecran d'accueil
@@ -78,7 +78,6 @@ int main(){
 	initScreen(interactionScreen, MAP_WIDTH, INTERACTION_HEIGHT);
 
 	//player
-
 	Player player;
 	player = initPlayer(MAP_WIDTH / 2, MAP_HEIGHT / 2, '@', starterPokemon);
 	ConsoleUtils::setColor(ConsoleUtils::Color::CYAN);
@@ -115,21 +114,25 @@ int main(){
 
 			for (int i = 0; i < numberPokemon; i++){
 
-				if (!pokemonTab[i].active) continue;
+				if (!pokemonTab[i].active) continue; //si la collision se fait avec un pokemon mort ou deja capturé 
 
-				if (player.curPos.x == pokemonTab[i].curPos.x && player.curPos.y == pokemonTab[i].curPos.y){
+				//checker collision
+				if (player.curPos.x == pokemonTab[i].curPos.x && player.curPos.y == pokemonTab[i].curPos.y){ 
 					pokemonCollidId = i;
 					break;
 				}else{
-					
+					//afficher skin precedent du pokemon
 					setSkinGrass(&pokemonTab[i], 'w', ' ', MAP_HEIGHT/2);
 					displayCharacter(pokemonTab[i].curPos.x, pokemonTab[i].curPos.y + textOffset, pokemonTab[i].skin);
+					//bouger pokemon
 					pokemonMove(&pokemonTab[i], MAP_WIDTH, MAP_HEIGHT, textOffset);
+					//afficher pokemon
 					setSkinGrass(&pokemonTab[i], 'w', '&', MAP_HEIGHT/2);
 					displayCharacter(pokemonTab[i].curPos.x, pokemonTab[i].curPos.y + textOffset, pokemonTab[i].skin);
 
 					if (!pokemonTab[i].active) continue;
-					if (player.curPos.x == pokemonTab[i].curPos.x && player.curPos.y == pokemonTab[i].curPos.y)
+					//rechecker collision
+					if (player.curPos.x == pokemonTab[i].curPos.x && player.curPos.y == pokemonTab[i].curPos.y) 
 					{
 						pokemonCollidId = i;
 						break;
@@ -162,7 +165,7 @@ int main(){
 							std::cout << " Vous avez décidé de fuir...Trouillard !" << std::flush;
 							sleep(2);
 							meetOver = true;
-						}
+						} //attaque
 						else if (meetPkmn == 1){
 
 							Attack(&player.teamPokemon[chosenone], &pokemonTab[pokemonCollidId]);
@@ -178,6 +181,8 @@ int main(){
 								cleanMessageArea(MAP_WIDTH, INTERACTION_HEIGHT + 8);
 								std::cout << "Félicitations ! Vous avez vaincu " << pokemonTab[pokemonCollidId].pkName << " !" << std::flush;
 								std::cout << std::endl;
+
+								//possibilité de gagner un objet après victoire 
 								int pokeballwon = rand() % 20;
 								if (pokeballwon<5){
 									bag.pokeball++;
@@ -208,29 +213,35 @@ int main(){
 								sleep(2);
 								meetOver = true; 
 							}else { 
-								displayPkStat(player.teamPokemon[chosenone], pokemonTab[pokemonCollidId], MAP_WIDTH);	playerTour = false;
+								displayPkStat(player.teamPokemon[chosenone], pokemonTab[pokemonCollidId], MAP_WIDTH);	
+								playerTour = false;
 							}
-						}
+						} //entrer dans l'inventaire
 						else if (meetPkmn == 0){
 							displayInventory(pokemonTab + pokemonCollidId, &player, textOffset, &chosenone, &bag, &meetOver, &playerTour);
-						}  	                  // adresse du tableau à la position pkmncollidid
-						
+						}  	            
+						//changer de pokemon 
 						else if (meetPkmn == 2){
 							displayteamPokemon(&player, &pokemonTab[pokemonCollidId], textOffset, &chosenone, &playerTour);
 						}
 					
 					}
 					else{
-
+						//tour du pokemon, il attaque
 						sleep(1);
 
 						Attack(&pokemonTab[pokemonCollidId], &player.teamPokemon[chosenone]);
+
 						cleanMessageArea(MAP_WIDTH, INTERACTION_HEIGHT + 8);
 						std::cout << pokemonTab[pokemonCollidId].pkName << " vous attaque !";
 
 						if (player.teamPokemon[chosenone].hp <= 0){
 							player.teamPokemon[chosenone].hp = 0;
+
+							//laisser la possibilité de choisir un autre pokemon lorsque chosenone meurt
 							displayteamPokemon(&player, &pokemonTab[pokemonCollidId], textOffset, &chosenone, &playerTour);
+
+							//terminer combat si nouveau pokemon choisi est aussi mort
 							if (player.teamPokemon[chosenone].hp <= 0){
 								player.teamPokemon[chosenone].hp = 0;
 							meetOver = true;
@@ -242,14 +253,18 @@ int main(){
 						}
 					}
 				}
+				//tester si équipe complete
 				if (player.teamPokemon[5].atk != 0){
 					gagne=true;
 					gameNotOver = true;
 				}
+
+				//remettre map, pokemon et player
 				displayMap(map, MAP_WIDTH, MAP_HEIGHT, textOffset);
 				ConsoleUtils::setColor(ConsoleUtils::Color::CYAN); 
 				displayCharacter(player.curPos.x, player.curPos.y + textOffset, player.skin);
 				ConsoleUtils::resetColors();
+
 				for (int i = 0; i < numberPokemon; i++)
 				{
 					if (pokemonTab[i].active) {

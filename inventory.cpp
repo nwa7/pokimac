@@ -1,5 +1,4 @@
 #include <random>
-
 #include "consoleUtils.hpp"
 #include "interface.h"
 #include "player.h" 
@@ -19,7 +18,7 @@ Bag initBag(){
 	return bag;
 }
 
-
+//menu inventory
 void displayActionChoice2(int MAP_WIDTH){
 
 	std::cout << std::endl << "Que va-tu faire?" << std::endl;
@@ -29,6 +28,7 @@ void displayActionChoice2(int MAP_WIDTH){
 	}
 }
 
+//probabilite de capture
 bool capture(Pokemon pokemon){
 	int luck= rand() % 100;
 	int weak=(100-pokemon.hp);
@@ -40,6 +40,7 @@ bool capture(Pokemon pokemon){
 	}
 }
 
+//check s'il reste de la place dans l'equipe
 int sparePlace (Player player){
 	for (int x=0; x<6; x++){
 		if (player.teamPokemon[x].atk==0){
@@ -49,6 +50,7 @@ int sparePlace (Player player){
 	return -1;
 }
 
+//ajoute pokemon dans l'equipe
 void addpkmntoteam (Player player, Pokemon pokemon, int index){
 
 	player.teamPokemon[index].curPos.x = pokemon.curPos.x;
@@ -64,6 +66,7 @@ void addpkmntoteam (Player player, Pokemon pokemon, int index){
 	pokemon.active = false;
 }
 
+//affichage inventory
 void displayInventory(Pokemon *pokemon, Player *player, int textOffset, int * chosenone, Bag *bag, bool * meetOver, bool * playerTour  ){
 	
     ConsoleUtils::clear();
@@ -149,7 +152,8 @@ void displayInventory(Pokemon *pokemon, Player *player, int textOffset, int * ch
 				}
 			}
 		}
-		// Leave inventory -> to fight menu
+		
+		//sort de l'inventaire 
 		else if (inventoryChoice == 2)
 		{
 			
@@ -162,6 +166,7 @@ void displayInventory(Pokemon *pokemon, Player *player, int textOffset, int * ch
 	}	
 }   
 
+//menu team pokemon
 void displayActionChoice3(int MAP_WIDTH){
 	ConsoleUtils::setCursorPos(0, 12);
 	std::cout << std::endl << "Qu'allez-vous faire?" << std::endl;
@@ -171,6 +176,7 @@ void displayActionChoice3(int MAP_WIDTH){
 	}
 }
 
+//affichage pokemon de la team et surlignage du pokemon selectionne
 void displayPlayerPkm(Player player, int pokemonIndex, int prevpokemonIndex){
 	ConsoleUtils::setCursorPos(0, 18+prevpokemonIndex);
 	std::cout << player.teamPokemon[prevpokemonIndex].pkName << " [" <<  player.teamPokemon[prevpokemonIndex].typeName <<"]"<< "  HP : " <<  (int) player.teamPokemon[prevpokemonIndex].hp << "  ATK : " << player.teamPokemon[prevpokemonIndex].atk << "  DEF : " << player.teamPokemon[prevpokemonIndex].def  ;
@@ -181,7 +187,7 @@ void displayPlayerPkm(Player player, int pokemonIndex, int prevpokemonIndex){
 }
 
 
-
+//team pokemon
 void displayteamPokemon(Player *player, Pokemon *pokemon, int textOffset, int * chosenone, bool * playerTour){
 	
     ConsoleUtils::clear();
@@ -203,7 +209,8 @@ void displayteamPokemon(Player *player, Pokemon *pokemon, int textOffset, int * 
 		std::cout << player->teamPokemon[i].pkName << " [" <<  player->teamPokemon[i].typeName <<"]"<< "  PV : " << (int) player->teamPokemon[i].hp << "  ATK : " << player->teamPokemon[i].atk << "  DEF : " << player->teamPokemon[i].def  ; 
 		}
 	}
-
+	
+	//permet de garder trace du pokemon selecitonne
 	int i = 1;
 	int j = i-1;
 	bool choiceDone = false; 

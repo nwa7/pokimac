@@ -1,12 +1,11 @@
 #include <iostream>
 #include <string.h>
-
 #include "consoleUtils.hpp"
 #include "interface.h"
 #include "player.h"
 #include "pokemon.h"
 
-
+//creation écran
 void initScreen(char *tab, int width, int height){
 	for (int j = 0; j < height; j++){
 		for (int i = 0; i < width; i++)
@@ -17,6 +16,7 @@ void initScreen(char *tab, int width, int height){
 	}
 }
 
+//creation herbe
 void initGrass(char *tab, int width, int height){
 for (int j = 1; j < height; j++){
 		for (int i = 1; i < width -1; i++){
@@ -25,6 +25,7 @@ for (int j = 1; j < height; j++){
 }
 }
 
+//affichage ecran
 void displayScreen(char *tab, int width, int height, int x, int y){
 	ConsoleUtils::setCursorPos(0, 2);
 	for (int j = 0; j < height; j++){
@@ -35,16 +36,19 @@ void displayScreen(char *tab, int width, int height, int x, int y){
 	}
 }
 
+//affichage de la map
 void displayMap(char *map, int MAP_WIDTH, int MAP_HEIGHT, int textOffset){
 	ConsoleUtils::clear();
 	displayScreen(map, MAP_WIDTH, MAP_HEIGHT, 0, 0+textOffset);
 }
 
+//affichage pokemon ou player
 void displayCharacter(int x, int y, char skin){
 	ConsoleUtils::setCursorPos(x, y);
 	std::cout << skin;
 }
 
+//affichage menu interaction
 void displayActionChoice(int MAP_WIDTH, int y){
 	ConsoleUtils::setCursorPos(0, y);
 	std::cout << std::endl << "Qu'allez-vous faire?" << std::endl;
@@ -54,7 +58,7 @@ void displayActionChoice(int MAP_WIDTH, int y){
 	}
 }
 
-
+//affichage pokemon et stat et barre de vie
 void displayPkStat(Pokemon playerPokemon, Pokemon enemyPokemon, int MAP_WIDTH){
 
 	int enemypkLifeLen = enemyPokemon.hp/10; 
@@ -108,6 +112,7 @@ void displayPkStat(Pokemon playerPokemon, Pokemon enemyPokemon, int MAP_WIDTH){
 
 }
 
+//effacer espace de message
 void cleanMessageArea(int width, int height){
 ConsoleUtils::setCursorPos(0, height);
 	for(int i=0; i<width; i++){
@@ -116,6 +121,7 @@ ConsoleUtils::setCursorPos(0, height);
 ConsoleUtils::setCursorPos(0, height);
 }
 
+//changer skin lorsque pokemon est dans l'herbe
 void setSkinGrass(Pokemon *pokemon, char skinGrass, char skinNormal, int grassHeight){
 	if(pokemon->curPos.y < grassHeight){
 		pokemon->skin = skinGrass;
@@ -124,7 +130,7 @@ void setSkinGrass(Pokemon *pokemon, char skinGrass, char skinNormal, int grassHe
 	}
 }
 
-
+//detection du choix en fonction des fleches du clavier
 int Choice(void){
 	int arrowChoice = -1;
 	do{ 

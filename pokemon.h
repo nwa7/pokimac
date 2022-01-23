@@ -18,7 +18,6 @@ struct Pokemon
 };
 typedef struct Pokemon Pokemon;
 
-//Pokemon initPokemon(int x, int y, char skin, int hp);
 Pokemon initPokemon(int x, int y, char skin, int hp, int atkIndex, int defIndex, int nameIndex);
 void pokemonMove(Pokemon *pokemon, int MAP_WIDTH, int MAP_HEIGHT, int textOffset);
 void setDegatCoef(Pokemon *fightingPokemon, Pokemon *enemyPokemon);

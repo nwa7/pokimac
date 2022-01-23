@@ -5,14 +5,6 @@
 #include "position.h"
 #include "pokemon.h"
 
-/*struct Player
-{
-	Position curPos;
-	char skin;
-	int hp;
-	bool active;
-};*/
-
 struct Player
 {
 	char const* name;
