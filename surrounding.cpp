@@ -43,6 +43,20 @@ void blablafin(char * playerName){
 	} while(!special);
 }
 
+void blablamauvaisefin(char * playerName){
+	ConsoleUtils::clear();
+	ConsoleUtils::setCursorPos(8, 6);
+	std::cout << "> Oh non " << playerName << " vos pokemon sont tous K.O. :( "<<std::endl;
+	ConsoleUtils::setCursorPos(8, 8);
+	std::cout << "> N'hésitez pas à retenter votre chance ! "<<std::endl;
+	ConsoleUtils::setCursorPos(25, 10);
+	std::cout << "Laurence & Elia" << std::endl;
+	bool special = false; 
+	do{ 
+		ConsoleUtils::getChar(&special);
+	} while(!special);
+}
+
 //selection pokemon starter
 Pokemon selecStarter(){
 	Pokemon *starterTab = (Pokemon *)malloc(sizeof(Pokemon) * 3);
@@ -65,4 +79,14 @@ Pokemon selecStarter(){
 	}
 	return starterTab[0];
     free(starterTab);
+}
+
+
+bool pokemonko(Player player){
+	for (int x=0; x<6; x++){
+		if ((player.teamPokemon[x].hp)!=0){
+			return 0;
+		}
+	}
+	return 1;
 }

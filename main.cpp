@@ -100,6 +100,7 @@ int main(){
 
 	bool gameNotOver = false;
 	bool gagne = false;
+	bool perdu = false;
 
 	while (!gameNotOver){
 
@@ -259,6 +260,13 @@ int main(){
 					gameNotOver = true;
 				}
 
+				//tester si tous les pkms K.O.
+				
+				if (pokemonko(player) == 1){
+					perdu = true;
+					gameNotOver = true;
+				}
+
 				//remettre map, pokemon et player
 				displayMap(map, MAP_WIDTH, MAP_HEIGHT, textOffset);
 				ConsoleUtils::setColor(ConsoleUtils::Color::CYAN); 
@@ -280,6 +288,9 @@ int main(){
 		}
 	if (gagne){
 		blablafin(playerName);
+	}
+	else if (perdu){
+		blablamauvaisefin(playerName);
 	}
 	// On libère tout le monde
 	free(playerName);

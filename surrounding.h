@@ -5,7 +5,9 @@
 
 char * blabla();
 void blablafin(char * playerName);
+void blablamauvaisefin(char * playerName);
 Pokemon selecStarter();
+bool pokemonko(Player player);
 
 
 #endif
